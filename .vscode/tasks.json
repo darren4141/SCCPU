@@ -9,9 +9,9 @@
         "-I",
         "inc",
         "-o",
-        "build/sim/${input:elementName}_sim",
-        "elements/${input:elementName}.v",
-        "tests/tb_${input:elementName}.v"
+        "build/sim/${input:elementNameSelect}_sim",
+        "elements/${input:elementNameSelect}.v",
+        "tests/tb_${input:elementNameSelect}.v"
       ],
       "group": {
         "kind": "build",
@@ -24,7 +24,7 @@
       "type": "shell",
       "command": "vvp",
       "args": [
-        "build/sim/${input:elementName}_sim"
+        "build/sim/${input:elementNameSelect}_sim"
       ],
       "dependsOn": "Build Verilog element",
       "problemMatcher": "$gcc"
@@ -37,12 +37,25 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Generate new Verilog element",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/generate_element.py",
+        "${input:elementNameInput}"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },      
+      "problemMatcher": []
     }
-
   ],
   "inputs": [
     {
-      "id": "elementName",
+      "id": "elementNameSelect",
       "type": "pickString",
       "description": "Choose an element",
       "options": [
@@ -50,6 +63,12 @@
         "alu",
         "muxes"
       ],
+      "default": "alu"
+    },
+    {
+      "id": "elementNameInput",
+      "type": "promptString",
+      "description": "Enter new element name",
       "default": "alu"
     }
   ]
