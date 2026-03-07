@@ -9,7 +9,7 @@ wire [31:0] sum;
 adder uut(a, b, sum);
 
 initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("build/vcd/adder_wave.vcd");
     $dumpvars(0, tb_adder);
 
     a = 5; b = 3;

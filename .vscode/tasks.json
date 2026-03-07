@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Verilog element",
+      "type": "shell",
+      "command": "iverilog",
+      "args": [
+        "-I",
+        "inc",
+        "-o",
+        "build/sim/${input:elementName}_sim",
+        "elements/${input:elementName}.v",
+        "tests/tb_${input:elementName}.v"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Run Verilog Sim",
+      "type": "shell",
+      "command": "vvp",
+      "args": [
+        "build/sim/${input:elementName}_sim"
+      ],
+      "dependsOn": "Build Verilog element",
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Build and Run Verilog element",
+      "dependsOn": "Run Verilog Sim",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+
+  ],
+  "inputs": [
+    {
+      "id": "elementName",
+      "type": "pickString",
+      "description": "Choose an element",
+      "options": [
+        "adder",
+        "alu",
+        "muxes"
+      ],
+      "default": "alu"
+    }
+  ]
+}

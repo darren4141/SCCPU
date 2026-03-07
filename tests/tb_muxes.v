@@ -71,7 +71,7 @@ task expect;
 endtask
 
 initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("build/vcd/muxes_wave.vcd");
     $dumpvars(0, tb_muxes);
 
     m2_in0 = 5; m2_in1 = 3; m2_sel = 1'b0;

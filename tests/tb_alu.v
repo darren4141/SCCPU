@@ -1,5 +1,6 @@
-`include "alu_defs.vh"
 `timescale 1ns/1ps
+
+`include "alu_defs.vh"
 
 module tb_alu;
 
@@ -24,7 +25,7 @@ task expect;
 endtask
 
 initial begin
-    $dumpfile("wave.vcd");
+    $dumpfile("build/vcd/alu_wave.vcd");
     $dumpvars(0, tb_alu);
 
     a = 5; 
