@@ -82,7 +82,8 @@
         "regfile",
         "imem",
         "dmem",
-        "pc"
+        "pc",
+        "bcomp"
       ],
       "default": "alu"
     },
