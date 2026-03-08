@@ -5,7 +5,7 @@ module mux_221 (
     output reg [31:0] out
 );
 
-  always_comb begin
+  always @(*) begin
     case (sel)
       1'b0: out = in0;
       1'b1: out = in1;
@@ -24,7 +24,7 @@ module mux_421 (
     output reg [31:0] out
 );
 
-  always_comb begin
+  always @(*) begin
     case (sel)
       2'b00:   out = in00;
       2'b01:   out = in01;
@@ -49,7 +49,7 @@ module mux_821 (
     output reg [31:0] out
 );
 
-  always_comb begin
+  always @(*) begin
     case (sel)
       3'b000:  out = in000;
       3'b001:  out = in001;

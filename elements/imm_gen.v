@@ -10,10 +10,10 @@ module imm_gen (
   wire sign = inst[31];
   reg [6:0] format;
 
-  always_comb begin
+  always @(*) begin
     format = `FORMAT_INVALID;
-
     imm = 32'b0;
+
     case (opcode)
       `OPCODE_ARITH_OP: format = `FORMAT_R;
       `OPCODE_ARITH_OP_IMM: format = `FORMAT_I;

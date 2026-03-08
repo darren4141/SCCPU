@@ -7,7 +7,7 @@ module alu (
     output reg [31:0] res
 );
 
-  always_comb begin
+  always @(*) begin
     res = 32'b0;
     case (op)
       `OP_PASSTHROUGH_A: res = a;

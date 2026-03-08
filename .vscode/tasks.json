@@ -6,6 +6,7 @@
       "type": "shell",
       "command": "iverilog",
       "args": [
+        "-g2012",
         "-I",
         "inc",
         "-I",
@@ -39,6 +40,19 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Build and Run All Elements",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/build_all.py"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
     },
     {
       "label": "Generate new Verilog element",

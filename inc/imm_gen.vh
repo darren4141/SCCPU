@@ -4,6 +4,6 @@
 `define FORMAT_S 7'b0100011
 `define FORMAT_B 7'b1100011
 `define FORMAT_U 7'b0110111
-`define FORMAT_J 7'b0110011
+`define FORMAT_J 7'b1101111
 `define FORMAT_INVALID 7'b0000000
 // verilog_format: on

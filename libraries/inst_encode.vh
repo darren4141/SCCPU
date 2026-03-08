@@ -63,6 +63,6 @@ function automatic [31:0] enc_j;
   input [6:0] opcode;
 
   begin
-    enc_u = {imm[20], imm[10:1], imm[11], imm[19:12], rd, opcode};
+    enc_j = {imm[20], imm[10:1], imm[11], imm[19:12], rd, opcode};
   end
 endfunction

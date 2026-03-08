@@ -4,7 +4,7 @@ module adder (
     output reg [31:0] sum
 );
 
-  always_comb begin
+  always @(*) begin
     sum = a + b;
   end
 
