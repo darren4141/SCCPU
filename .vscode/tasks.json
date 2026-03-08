@@ -8,6 +8,8 @@
       "args": [
         "-I",
         "inc",
+        "-I",
+        "libraries",
         "-o",
         "build/sim/${input:elementNameSelect}_sim",
         "elements/${input:elementNameSelect}.v",
@@ -61,7 +63,8 @@
       "options": [
         "adder",
         "alu",
-        "muxes"
+        "muxes",
+        "imm_gen"
       ],
       "default": "alu"
     },

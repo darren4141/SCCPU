@@ -20,7 +20,8 @@ endmodule
     Path(f"tests/tb_{name}.v"): f"""`timescale 1ns/1ps
 
 module tb_{name};
-
+    `include "expect.vh"
+    
     {name} uut();
 
     initial begin
