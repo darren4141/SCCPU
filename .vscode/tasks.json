@@ -78,7 +78,8 @@
         "adder",
         "alu",
         "muxes",
-        "imm_gen"
+        "imm_gen",
+        "regfile"
       ],
       "default": "alu"
     },
