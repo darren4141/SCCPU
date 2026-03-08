@@ -4,7 +4,6 @@ task automatic expect_32;
   begin
     if (actual !== expected) begin
       $display("FAIL: expected %0d got %0d", expected, actual);
-      $finish;
     end else $display("PASS: expected %0d got %0d", expected, actual);
   end
 endtask
@@ -15,7 +14,6 @@ task automatic expect_16;
   begin
     if (actual !== expected) begin
       $display("FAIL: expected %0d got %0d", expected, actual);
-      $finish;
     end else $display("PASS: expected %0d got %0d", expected, actual);
   end
 endtask
@@ -26,7 +24,6 @@ task automatic expect_8;
   begin
     if (actual !== expected) begin
       $display("FAIL: expected %0d got %0d", expected, actual);
-      $finish;
     end else $display("PASS: expected %0d got %0d", expected, actual);
   end
 endtask
@@ -37,7 +34,6 @@ task automatic expect_1;
   begin
     if (actual !== expected) begin
       $display("FAIL: expected %0d got %0d", expected, actual);
-      $finish;
     end else $display("PASS: expected %0d got %0d", expected, actual);
   end
 endtask
