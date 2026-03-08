@@ -1,10 +1,10 @@
 `include "alu_defs.vh"
 
 module alu (
-    input [31:0] a,
-    input [31:0] b,
-    input [7:0] op,
-    output reg [31:0] res
+    input  wire [31:0] a,
+    input  wire [31:0] b,
+    input  wire [ 7:0] op,
+    output reg  [31:0] res
 );
 
   always @(*) begin
