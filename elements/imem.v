@@ -1,4 +1,4 @@
-`include "imem.vh"
+`include "mem.vh"
 
 module imem (
     input  wire [31:0] addr,

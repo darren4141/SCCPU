@@ -81,6 +81,7 @@
         "imm_gen",
         "regfile",
         "imem",
+        "dmem",
         "pc"
       ],
       "default": "alu"
