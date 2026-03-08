@@ -79,7 +79,8 @@
         "alu",
         "muxes",
         "imm_gen",
-        "regfile"
+        "regfile",
+        "imem"
       ],
       "default": "alu"
     },
