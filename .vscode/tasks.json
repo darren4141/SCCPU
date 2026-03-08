@@ -80,7 +80,8 @@
         "muxes",
         "imm_gen",
         "regfile",
-        "imem"
+        "imem",
+        "pc"
       ],
       "default": "alu"
     },
