@@ -1,3 +1,4 @@
+// verilog_format: off
 `define OP_PASSTHROUGH_A 8'b00000000
 `define OP_PASSTHROUGH_B 8'b00000001
 `define OP_ADD 8'b00000010
@@ -8,3 +9,4 @@
 `define OP_SLL 8'b00000111
 `define OP_SRL 8'b00001000
 `define OP_SLT 8'b00001001
+// verilog_format: on
