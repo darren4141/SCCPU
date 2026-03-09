@@ -3,7 +3,7 @@
 module alu (
     input  wire [31:0] a,
     input  wire [31:0] b,
-    input  wire [ 7:0] op,
+    input  wire [ 3:0] op,
     output reg  [31:0] res
 );
 
@@ -19,7 +19,10 @@ module alu (
       `OP_XOR: res = a ^ b;
       `OP_SLL: res = a << b[4:0];
       `OP_SRL: res = a >> b[4:0];
-      `OP_SLT: res = (a < b) ? 1 : 0;
+      `OP_SRA: res = $signed(a) >>> b[4:0];
+      `OP_SLT: res = ($signed(a) < $signed(b)) ? 1 : 0;
+      `OP_SLTU: res = (a < b) ? 1 : 0;
+      `OP_INVALID: res = 32'h0;
       default: res = 32'h0;
     endcase
   end

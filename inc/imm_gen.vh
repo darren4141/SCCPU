@@ -1,9 +1,9 @@
 // verilog_format: off
-`define FORMAT_R 7'b0110011
-`define FORMAT_I 7'b0010011
-`define FORMAT_S 7'b0100011
-`define FORMAT_B 7'b1100011
-`define FORMAT_U 7'b0110111
-`define FORMAT_J 7'b1101111
-`define FORMAT_INVALID 7'b0000000
+`define FORMAT_R 3'b000
+`define FORMAT_I 3'b001
+`define FORMAT_S 3'b010
+`define FORMAT_B 3'b011
+`define FORMAT_U 3'b100
+`define FORMAT_J 3'b101
+`define FORMAT_INVALID 3'b111
 // verilog_format: on

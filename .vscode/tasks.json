@@ -83,7 +83,8 @@
         "imem",
         "dmem",
         "pc",
-        "bcomp"
+        "bcomp",
+        "control"
       ],
       "default": "alu"
     },

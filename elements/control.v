@@ -1,0 +1,326 @@
+`include "constants.vh"
+`include "control_defs.vh"
+`include "alu_defs.vh"
+`include "imm_gen.vh"
+
+module control (
+    input wire [8:0] inst,
+    input wire brEQ,
+    input wire brLT,
+    output reg [13:0] control
+);
+
+  wire [6:0] opcode = {inst[4:0], 2'b11};
+  wire [2:0] funct3 = inst[7:5];
+  wire funct7 = inst[8];
+
+  wire PCSel = control[13];
+  wire [2:0] ImmSel = control[12:10];
+  wire RegWen = control[9];
+  wire brUN = control[8];
+  wire bSel = control[7];
+  wire aSel = control[6];
+  wire [3:0] ALUSel = control[5:3];
+  wire MemRW = control[2];
+  wire [1:0] WBSel = control[1:0];
+
+  always @(*) begin
+    control = 14'b0;
+    case (opcode)
+
+      /* R-Format Arithmetic Operations
+        - PCSel = 0
+        - ImmSel = DC
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 0
+        - aSel = 0
+        - ALUSel based on funct3 and funct7
+        - MemRW = 0
+        - WBSel = 1
+    */
+      `OPCODE_ARITH_OP: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_INVALID,  // ImmSel
+          1'b0,  // RegWen
+          1'b0,  // brUN
+          1'b0,  //bSel
+          1'b0,  //aSel
+          `OP_INVALID,  //ALUSel
+          1'b0,  // MemRW
+          2'b01  // WBSel
+        };
+
+        case (funct3)
+          `FUNCT3_ADD_SUB: begin
+            case (funct7)
+              7'h0:    control[5:3] = `OP_ADD;
+              7'h20:   control[5:3] = `OP_SUB;
+              default: control[5:3] = `OP_INVALID;
+            endcase
+          end
+          `FUNCT3_XOR:  control[5:3] = `OP_XOR;
+          `FUNCT3_OR:   control[5:3] = `OP_OR;
+          `FUNCT3_AND:  control[5:3] = `OP_AND;
+          `FUNCT3_SLL:  control[5:3] = `OP_SLL;
+          `FUNCT3_SRL_SRA: begin
+            case (funct7)
+              7'h0:    control[5:3] = `OP_SRL;
+              7'h20:   control[5:3] = `OP_SRA;
+              default: control[5:3] = `OP_INVALID;
+            endcase
+          end
+          `FUNCT3_SLT:  control[5:3] = `OP_SLT;
+          `FUNCT3_SLTU: control[5:3] = `OP_SLTU;
+          default: control[5:3] = `OP_INVALID;
+        endcase
+
+      end
+      /* Immediate Arithmetic Operations
+        - PCSel = 0
+        - ImmSel = I
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 1
+        - aSel = 0
+        - ALUSel based on funct3 and funct7
+        - MemRW = 0
+        - WBSel = 1
+    */
+
+      `OPCODE_ARITH_OP_IMM: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_I,  // ImmSel
+          1'b1,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b0,  //aSel
+          `OP_INVALID,  //ALUSel
+          1'b0,  // MemRW
+          2'b01  // WBSel
+        };
+
+        case (funct3)
+          `FUNCT3_ADD_SUB: control[5:3] = `OP_ADD;
+          `FUNCT3_XOR:     control[5:3] = `OP_XOR;
+          `FUNCT3_OR:      control[5:3] = `OP_OR;
+          `FUNCT3_AND:     control[5:3] = `OP_AND;
+          `FUNCT3_SLL:     control[5:3] = `OP_SLL;
+          `FUNCT3_SRL_SRA: begin
+            case (funct7)
+              7'h0:    control[5:3] = `OP_SRL;
+              7'h20:   control[5:3] = `OP_SRA;
+              default: control[5:3] = `OP_INVALID;
+            endcase
+          end
+          `FUNCT3_SLT:     control[5:3] = `OP_SLT;
+          `FUNCT3_SLTU:    control[5:3] = `OP_SLTU;
+          default:         control[5:3] = `OP_INVALID;
+        endcase
+
+      end
+
+      /* Load Operations
+        - PCSel = 0
+        - ImmSel = I
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 1
+        - aSel = 0
+        - ALUSel = OP_ADD
+        - MemRW = 0
+        - WBSel = 0
+    */
+
+      `OPCODE_LOAD: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_I,  // ImmSel
+          1'b1,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b0,  //aSel
+          `OP_ADD,  //ALUSel
+          1'b0,  // MemRW
+          2'b00  // WBSel
+        };
+      end
+
+      /* Store Operations
+        - PCSel = 0
+        - ImmSel = S
+        - RegWen = 0
+        - BrUN = DC
+        - bSel = 1
+        - aSel = 0
+        - ALUSel = OP_ADD
+        - MemRW = 1
+        - WBSel = DC
+    */
+
+      `OPCODE_STORE: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_S,  // ImmSel
+          1'b0,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b0,  //aSel
+          `OP_ADD,  //ALUSel
+          1'b1,  // MemRW
+          2'b00  // WBSel
+        };
+      end
+
+      /* Branch Operations
+        - PCSel = 0 - no branch, 1 - take the branch. Based on result of brLT, brEQ and funct3
+        - ImmSel = B
+        - RegWen = 0
+        - BrUN = Based on funct3
+        - bSel = 1
+        - aSel = 1
+        - ALUSel = OP_ADD
+        - MemRW = 0
+        - WBSel = DC
+    */
+
+      `OPCODE_BRANCH: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_B,  // ImmSel
+          1'b0,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b1,  //aSel
+          `OP_ADD,  //ALUSel
+          1'b0,  // MemRW
+          2'b00  // WBSel
+        };
+        case (funct3)
+          `FUNCT3_BEQ, `FUNCT3_BNE, `FUNCT3_BLT, `FUNCT3_BGE: control[8] = 0;
+          `FUNCT3_BTLU, `FUNCT3_BGEU: control[8] = 1;
+          default: control[8] = 0;
+        endcase
+
+        case (funct3)
+          `FUNCT3_BEQ: control[13] = brEQ;
+          `FUNCT3_BNE: control[13] = ~brEQ;
+          `FUNCT3_BLT, `FUNCT3_BTLU: control[13] = brLT;
+          `FUNCT3_BGE, `FUNCT3_BGEU: control[13] = ~brLT;
+          default: control[13] = 0;
+        endcase
+
+      end
+
+      /* J-format Jump Operations (jal)
+        - PCSel = 1
+        - ImmSel = J
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 1
+        - aSel = 1
+        - ALUSel = OP_ADD
+        - MemRW = 0
+        - WBSel = 2
+    */
+
+      `OPCODE_JAL: begin
+        control = {
+          1'b1,  // PCSel
+          `FORMAT_J,  // ImmSel
+          1'b1,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b1,  //aSel
+          `OP_ADD,  //ALUSel
+          1'b0,  // MemRW
+          2'b10  // WBSel
+        };
+      end
+
+      /* I-format Jump Operations (jalr)
+        - PCSel = 1
+        - ImmSel = I
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 1
+        - aSel = 0
+        - ALUSel = OP_ADD
+        - MemRW = 0
+        - WBSel = 2
+    */
+
+      `OPCODE_JALR: begin
+        control = {
+          1'b1,  // PCSel
+          `FORMAT_I,  // ImmSel
+          1'b1,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b0,  //aSel
+          `OP_ADD,  //ALUSel
+          1'b0,  // MemRW
+          2'b10  // WBSel
+        };
+      end
+
+      /* U-format (lui)
+        - PCSel = 0
+        - ImmSel = U
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 1
+        - aSel = DC
+        - ALUSel = OP_PASSTHROUGH_B
+        - MemRW = 0
+        - WBSel = 2
+    */
+
+      `OPCODE_JALR: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_U,  // ImmSel
+          1'b1,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b0,  //aSel
+          `OP_PASSTHROUGH_B,  //ALUSel
+          1'b0,  // MemRW
+          2'b10  // WBSel
+        };
+      end
+
+      /* U-format (auipc)
+        - PCSel = 0
+        - ImmSel = U
+        - RegWen = 1
+        - BrUN = DC
+        - bSel = 1
+        - aSel = 1
+        - ALUSel = OP_ADD
+        - MemRW = 0
+        - WBSel = 2
+    */
+
+      `OPCODE_AUIPC: begin
+        control = {
+          1'b0,  // PCSel
+          `FORMAT_U,  // ImmSel
+          1'b1,  // RegWen
+          1'b0,  // brUN
+          1'b1,  //bSel
+          1'b1,  //aSel
+          `OP_ADD,  //ALUSel
+          1'b0,  // MemRW
+          2'b10  // WBSel
+        };
+      end
+
+      default: control = 14'b0;
+    endcase
+
+  end
+
+endmodule
