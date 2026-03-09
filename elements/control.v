@@ -7,25 +7,15 @@ module control (
     input wire [8:0] inst,
     input wire brEQ,
     input wire brLT,
-    output reg [13:0] control
+    output reg [14:0] control
 );
 
   wire [6:0] opcode = {inst[4:0], 2'b11};
   wire [2:0] funct3 = inst[7:5];
   wire funct7 = inst[8];
 
-  wire PCSel = control[13];
-  wire [2:0] ImmSel = control[12:10];
-  wire RegWen = control[9];
-  wire brUN = control[8];
-  wire bSel = control[7];
-  wire aSel = control[6];
-  wire [3:0] ALUSel = control[5:3];
-  wire MemRW = control[2];
-  wire [1:0] WBSel = control[1:0];
-
   always @(*) begin
-    control = 14'b0;
+    control = 15'b0;
     case (opcode)
 
       /* R-Format Arithmetic Operations
@@ -55,25 +45,25 @@ module control (
         case (funct3)
           `FUNCT3_ADD_SUB: begin
             case (funct7)
-              7'h0:    control[5:3] = `OP_ADD;
-              7'h20:   control[5:3] = `OP_SUB;
-              default: control[5:3] = `OP_INVALID;
+              7'h0:    `CTRL_ALUSEL(control) = `OP_ADD;
+              7'h20:   `CTRL_ALUSEL(control) = `OP_SUB;
+              default: `CTRL_ALUSEL(control) = `OP_INVALID;
             endcase
           end
-          `FUNCT3_XOR:  control[5:3] = `OP_XOR;
-          `FUNCT3_OR:   control[5:3] = `OP_OR;
-          `FUNCT3_AND:  control[5:3] = `OP_AND;
-          `FUNCT3_SLL:  control[5:3] = `OP_SLL;
+          `FUNCT3_XOR:  `CTRL_ALUSEL(control) = `OP_XOR;
+          `FUNCT3_OR:   `CTRL_ALUSEL(control) = `OP_OR;
+          `FUNCT3_AND:  `CTRL_ALUSEL(control) = `OP_AND;
+          `FUNCT3_SLL:  `CTRL_ALUSEL(control) = `OP_SLL;
           `FUNCT3_SRL_SRA: begin
             case (funct7)
-              7'h0:    control[5:3] = `OP_SRL;
-              7'h20:   control[5:3] = `OP_SRA;
-              default: control[5:3] = `OP_INVALID;
+              7'h0:    `CTRL_ALUSEL(control) = `OP_SRL;
+              7'h20:   `CTRL_ALUSEL(control) = `OP_SRA;
+              default: `CTRL_ALUSEL(control) = `OP_INVALID;
             endcase
           end
-          `FUNCT3_SLT:  control[5:3] = `OP_SLT;
-          `FUNCT3_SLTU: control[5:3] = `OP_SLTU;
-          default: control[5:3] = `OP_INVALID;
+          `FUNCT3_SLT:  `CTRL_ALUSEL(control) = `OP_SLT;
+          `FUNCT3_SLTU: `CTRL_ALUSEL(control) = `OP_SLTU;
+          default: `CTRL_ALUSEL(control) = `OP_INVALID;
         endcase
 
       end
@@ -103,21 +93,21 @@ module control (
         };
 
         case (funct3)
-          `FUNCT3_ADD_SUB: control[5:3] = `OP_ADD;
-          `FUNCT3_XOR:     control[5:3] = `OP_XOR;
-          `FUNCT3_OR:      control[5:3] = `OP_OR;
-          `FUNCT3_AND:     control[5:3] = `OP_AND;
-          `FUNCT3_SLL:     control[5:3] = `OP_SLL;
+          `FUNCT3_ADD_SUB: `CTRL_ALUSEL(control) = `OP_ADD;
+          `FUNCT3_XOR:     `CTRL_ALUSEL(control) = `OP_XOR;
+          `FUNCT3_OR:      `CTRL_ALUSEL(control) = `OP_OR;
+          `FUNCT3_AND:     `CTRL_ALUSEL(control) = `OP_AND;
+          `FUNCT3_SLL:     `CTRL_ALUSEL(control) = `OP_SLL;
           `FUNCT3_SRL_SRA: begin
             case (funct7)
-              7'h0:    control[5:3] = `OP_SRL;
-              7'h20:   control[5:3] = `OP_SRA;
-              default: control[5:3] = `OP_INVALID;
+              7'h0:    `CTRL_ALUSEL(control) = `OP_SRL;
+              7'h20:   `CTRL_ALUSEL(control) = `OP_SRA;
+              default: `CTRL_ALUSEL(control) = `OP_INVALID;
             endcase
           end
-          `FUNCT3_SLT:     control[5:3] = `OP_SLT;
-          `FUNCT3_SLTU:    control[5:3] = `OP_SLTU;
-          default:         control[5:3] = `OP_INVALID;
+          `FUNCT3_SLT:     `CTRL_ALUSEL(control) = `OP_SLT;
+          `FUNCT3_SLTU:    `CTRL_ALUSEL(control) = `OP_SLTU;
+          default:         `CTRL_ALUSEL(control) = `OP_INVALID;
         endcase
 
       end
@@ -199,17 +189,17 @@ module control (
           2'b00  // WBSel
         };
         case (funct3)
-          `FUNCT3_BEQ, `FUNCT3_BNE, `FUNCT3_BLT, `FUNCT3_BGE: control[8] = 0;
-          `FUNCT3_BTLU, `FUNCT3_BGEU: control[8] = 1;
-          default: control[8] = 0;
+          `FUNCT3_BEQ, `FUNCT3_BNE, `FUNCT3_BLT, `FUNCT3_BGE: `CTRL_BRUN(control) = 0;
+          `FUNCT3_BTLU, `FUNCT3_BGEU: `CTRL_BRUN(control) = 1;
+          default: `CTRL_BRUN(control) = 0;
         endcase
 
         case (funct3)
-          `FUNCT3_BEQ: control[13] = brEQ;
-          `FUNCT3_BNE: control[13] = ~brEQ;
-          `FUNCT3_BLT, `FUNCT3_BTLU: control[13] = brLT;
-          `FUNCT3_BGE, `FUNCT3_BGEU: control[13] = ~brLT;
-          default: control[13] = 0;
+          `FUNCT3_BEQ: `CTRL_PCSEL(control) = brEQ;
+          `FUNCT3_BNE: `CTRL_PCSEL(control) = ~brEQ;
+          `FUNCT3_BLT, `FUNCT3_BTLU: `CTRL_PCSEL(control) = brLT;
+          `FUNCT3_BGE, `FUNCT3_BGEU: `CTRL_PCSEL(control) = ~brLT;
+          default: `CTRL_PCSEL(control) = 0;
         endcase
 
       end

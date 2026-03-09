@@ -18,4 +18,15 @@
 `define FUNCT3_BTLU 3'h6
 `define FUNCT3_BGEU 3'h7
 
+// Control macros
+`define CTRL_PCSEL(x)   x[14]
+`define CTRL_IMMSEL(x)  x[13:11]
+`define CTRL_REGWEN(x)  x[10]
+`define CTRL_BRUN(x)    x[9]
+`define CTRL_BSEL(x)    x[8]
+`define CTRL_ASEL(x)    x[7]
+`define CTRL_ALUSEL(x)  x[6:3]
+`define CTRL_MEMRW(x)   x[2]
+`define CTRL_WBSEL(x)   x[1:0]
+
 // verilog_format: on

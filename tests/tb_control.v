@@ -6,7 +6,7 @@ module tb_control;
   reg [8:0] inst;
   reg brEQ;
   reg brLT;
-  wire [13:0] control;
+  wire [14:0] control;
 
   control uut (
       .inst(inst),
