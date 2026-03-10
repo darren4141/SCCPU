@@ -16,7 +16,7 @@ module tb_control;
   );
 
   initial begin
-    $dumpfile("build/vcd/control_wave.vcd");
+    $dumpfile("build/vcd/elements/control_wave.vcd");
     $dumpvars(0, tb_control);
 
     #10;

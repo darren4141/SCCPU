@@ -16,7 +16,7 @@ module tb_pc;
   );
 
   initial begin
-    $dumpfile("build/vcd/pc_wave.vcd");
+    $dumpfile("build/vcd/elements/pc_wave.vcd");
     $dumpvars(0, tb_pc);
 
     rst = 0;

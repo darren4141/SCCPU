@@ -14,7 +14,7 @@ module tb_adder;
   );
 
   initial begin
-    $dumpfile("build/vcd/adder_wave.vcd");
+    $dumpfile("build/vcd/elements/adder_wave.vcd");
     $dumpvars(0, tb_adder);
 
     a = 5;

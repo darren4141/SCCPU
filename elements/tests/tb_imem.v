@@ -12,7 +12,7 @@ module tb_imem;
   );
 
   initial begin
-    $dumpfile("build/vcd/imem_wave.vcd");
+    $dumpfile("build/vcd/elements/imem_wave.vcd");
     $dumpvars(0, tb_imem);
 
     #10;

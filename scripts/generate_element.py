@@ -25,7 +25,7 @@ module tb_{name};
     {name} uut();
 
     initial begin
-        $dumpfile("build/vcd/{name}_wave.vcd");
+        $dumpfile("build/vcd/elements/{name}_wave.vcd");
         $dumpvars(0, tb_{name});
 
         #10;

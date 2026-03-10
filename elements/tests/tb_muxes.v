@@ -57,7 +57,7 @@ module tb_muxes;
   );
 
   initial begin
-    $dumpfile("build/vcd/muxes_wave.vcd");
+    $dumpfile("build/vcd/elements/muxes_wave.vcd");
     $dumpvars(0, tb_muxes);
 
     m2_in0 = 5;

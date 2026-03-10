@@ -26,7 +26,7 @@ module tb_regfile;
   );
 
   initial begin
-    $dumpfile("build/vcd/regfile_wave.vcd");
+    $dumpfile("build/vcd/elements/regfile_wave.vcd");
     $dumpvars(0, tb_regfile);
 
     clk = 0;

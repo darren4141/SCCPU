@@ -37,11 +37,11 @@ for element in elements:
     build_cmd = [
         "iverilog",
         "-g2012",
-        "-I", "inc",
+        "-I", "elements/inc",
         "-I", "libraries",
-        "-o", f"build/sim/{element}_sim",
-        f"elements/{element}.v",
-        f"tests/tb_{element}.v"
+        "-o", f"build/sim/elements/{element}_sim",
+        f"elements/src/{element}.v",
+        f"elements/tests/tb_{element}.v"
     ]
     
     print(f"Building {element}...")
@@ -51,7 +51,7 @@ for element in elements:
         sys.exit(1)
     
     # Run
-    run_cmd = ["vvp", f"build/sim/{element}_sim"]
+    run_cmd = ["vvp", f"build/sim/elements/{element}_sim"]
     
     print(f"Running {element}...")
     result = subprocess.run(run_cmd, capture_output=True, text=True)

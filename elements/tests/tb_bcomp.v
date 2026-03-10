@@ -18,7 +18,7 @@ module tb_bcomp;
   );
 
   initial begin
-    $dumpfile("build/vcd/bcomp_wave.vcd");
+    $dumpfile("build/vcd/elements/bcomp_wave.vcd");
     $dumpvars(0, tb_bcomp);
 
     #10;

@@ -18,7 +18,7 @@ module tb_imm_gen;
   );
 
   initial begin
-    $dumpfile("build/vcd/imm_gen_wave.vcd");
+    $dumpfile("build/vcd/elements/imm_gen_wave.vcd");
     $dumpvars(0, tb_imm_gen);
     #10;
 

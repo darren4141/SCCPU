@@ -7,14 +7,12 @@
       "command": "iverilog",
       "args": [
         "-g2012",
-        "-I",
-        "inc",
-        "-I",
-        "libraries",
+        "-I", "elements/inc",
+        "-I", "libraries",
         "-o",
-        "build/sim/${input:elementNameSelect}_sim",
-        "elements/${input:elementNameSelect}.v",
-        "tests/tb_${input:elementNameSelect}.v"
+        "build/sim/elements/${input:elementNameSelect}_sim",
+        "elements/src/${input:elementNameSelect}.v",
+        "elements/tests/tb_${input:elementNameSelect}.v"
       ],
       "group": {
         "kind": "build",
@@ -27,7 +25,7 @@
       "type": "shell",
       "command": "vvp",
       "args": [
-        "build/sim/${input:elementNameSelect}_sim"
+        "build/sim/elements/${input:elementNameSelect}_sim"
       ],
       "dependsOn": "Build Verilog element",
       "problemMatcher": "$gcc"

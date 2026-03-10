@@ -18,7 +18,7 @@ module tb_dmem;
   );
 
   initial begin
-    $dumpfile("build/vcd/dmem_wave.vcd");
+    $dumpfile("build/vcd/elements/dmem_wave.vcd");
     $dumpvars(0, tb_dmem);
 
     #10;
