@@ -12,6 +12,10 @@ module tb_imem;
   );
 
   initial begin
+    $readmemh("programs/program.hex", uut.inst_mem, 0, `IMEM_SIZE - 1);
+  end
+
+  initial begin
     $dumpfile("build/vcd/elements/imem_wave.vcd");
     $dumpvars(0, tb_imem);
 
