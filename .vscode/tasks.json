@@ -65,7 +65,108 @@
         "isDefault": true
       },      
       "problemMatcher": []
-    }
+    },
+    {
+      "label": "Build Verilog CPU Test",
+      "type": "shell",
+      "command": "iverilog",
+      "args": [
+        "-g2012",
+        "-I", "elements/inc",
+        "-I", "libraries",
+        "-o",
+        "build/sim/projects/$cpu_{input:cpuTestNameSelect}_sim",
+        "projects/src/cpu_single_cycle.v",
+        "elements/src/adder.v",
+        "elements/src/alu.v",
+        "elements/src/bcomp.v",
+        "elements/src/control.v",
+        "elements/src/dmem.v",
+        "elements/src/imem.v",
+        "elements/src/imm_gen.v",
+        "elements/src/muxes.v",
+        "elements/src/pc.v",
+        "elements/src/regfile.v",
+        "projects/tests/tb_cpu_${input:cpuTestNameSelect}.v"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Run Verilog CPU Test",
+      "type": "shell",
+      "command": "vvp",
+      "args": [
+        "build/sim/projects/$cpu_{input:cpuTestNameSelect}_sim"
+      ],
+      "dependsOn": "Build Verilog CPU Test",
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Build and Run Verilog CPU Test",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/run_cpu_test.py",
+        "${input:cpuTestNameSelect}"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Generate new CPU test",
+      "type": "shell",
+      "command": "",
+      "args": [
+        "scripts/generate_project_test.py",
+        "${input:testNameInput}"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },      
+      "problemMatcher": []
+    },
+    {
+      "label": "Assemble .s file",
+      "type": "shell",
+      "command": "riscv-none-elf-as",
+      "args": [
+        "-march=rv32i",
+        "projects/programs/cpu_${input:cpuTestNameSelect}_program.s",
+        "-o",
+        "build/obj/cpu_${input:cpuTestNameSelect}_program.o"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },      
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate .hex file from .s file",
+      "type": "shell",
+      "command": "riscv-none-elf-objcopy",
+      "args": [
+        "-O",
+        "verilog",
+        "build/obj/cpu_${input:cpuTestNameSelect}_program.o",
+        "build/hex/cpu_${input:cpuTestNameSelect}_program.hex"
+      ],
+      "dependsOn": "Assemble .s file",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },      
+      "problemMatcher": []
+    },
+
   ],
   "inputs": [
     {
@@ -87,10 +188,26 @@
       "default": "alu"
     },
     {
+      "id": "cpuTestNameSelect",
+      "type": "pickString",
+      "description": "Choose an CPU test",
+      "options": [
+        "add",
+        "shift"
+      ],
+      "default": "add"
+    },
+    {
       "id": "elementNameInput",
       "type": "promptString",
       "description": "Enter new element name",
       "default": "alu"
+    },
+    {
+      "id": "testNameInput",
+      "type": "promptString",
+      "description": "Enter new test name",
+      "default": "add"
     }
   ]
 }

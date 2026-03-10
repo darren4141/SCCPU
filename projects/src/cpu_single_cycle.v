@@ -19,7 +19,7 @@ module cpu_single_cycle (
   adder u_pc_adder (
       .a  (pc_cur),
       .b  (32'd4),
-      .out(pc_plus4)
+      .sum(pc_plus4)
   );
 
   wire [31:0] inst;
@@ -52,19 +52,17 @@ module cpu_single_cycle (
       .dataB(dataB)
   );
 
-  wire brUN;
-
   bcomp u_bcomp (
       .dataA(dataA),
       .dataB(dataB),
-      .brUN (brUN),
+      .brUN (`CTRL_BRUN(control)),
       .brEQ (brEQ),
       .brLT (brLT)
   );
 
   wire [31:0] imm;
 
-  immgen u_immgen (
+  imm_gen u_imm_gen (
       .inst(inst),
       .ImmSel(`CTRL_IMMSEL(control)),
       .imm(imm)
@@ -106,15 +104,13 @@ module cpu_single_cycle (
       .dataR(dataR)
   );
 
-  wire [31:0] muxwb_out;
-
   mux_421 u_muxwb (
       .in00(dataR),
       .in01(aluRes),
       .in10(pc_plus4),
       .in11(32'b0),
       .sel (`CTRL_WBSEL(control)),
-      .out (muxwb_out)
+      .out (dataD)
   );
 
   mux_221 u_muxpc (

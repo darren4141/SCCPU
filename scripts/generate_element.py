@@ -9,7 +9,7 @@ if len(sys.argv) < 2:
 name = sys.argv[1]
 
 files = {
-    Path(f"elements/{name}.v"): f"""module {name}();
+    Path(f"elements/src/{name}.v"): f"""module {name}();
 
 always @(*) begin
 
@@ -17,7 +17,7 @@ end
 
 endmodule
 """,
-    Path(f"tests/tb_{name}.v"): f"""`timescale 1ns/1ps
+    Path(f"elements/tests/tb_{name}.v"): f"""`timescale 1ns/1ps
 
 module tb_{name};
     `include "expect.vh"

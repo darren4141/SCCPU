@@ -33,7 +33,7 @@ module control (
         control = {
           1'b0,  // PCSel
           `FORMAT_INVALID,  // ImmSel
-          1'b0,  // RegWen
+          1'b1,  // RegWen
           1'b0,  // brUN
           1'b0,  //bSel
           1'b0,  //aSel
