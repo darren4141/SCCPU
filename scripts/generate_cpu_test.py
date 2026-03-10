@@ -1,9 +1,9 @@
-# scripts/generate_project_test.py
+# scripts/generate_cpu_test.py
 from pathlib import Path
 import sys
 
 if len(sys.argv) < 2:
-    print("Usage: python scripts/generate_project_test.py <test name>")
+    print("Usage: python scripts/generate_cpu_test.py <test name>")
     sys.exit(1)
 
 name = sys.argv[1]
@@ -15,6 +15,7 @@ f"""`include "mem.vh"
 
 module tb_cpu_{name};
   `include "expect.vh"
+  `include "regfile_access.vh"
 
   reg clk;
   reg rst;
@@ -35,7 +36,7 @@ module tb_cpu_{name};
 
   initial begin
     $dumpfile("build/vcd/projects/tb_cpu_{name}.vcd");
-    $dumpvars(0, tb_bcomp);
+    $dumpvars(0, tb_cpu_{name});
 
     #10;
     rst = 1;
@@ -43,7 +44,9 @@ module tb_cpu_{name};
     rst = 0;
 
     repeat (10) @(posedge clk);
-    
+
+    // TEST CODE
+
     $finish;
   end
 

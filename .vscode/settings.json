@@ -13,5 +13,11 @@
     "[verilog-header]": {
         "editor.defaultFormatter": "chipsalliance.verible",
         "editor.formatOnSave": true
-    }
+    },
+  "npm.autoDetect": "off",
+  "gulp.autoDetect": "off",
+  "grunt.autoDetect": "off",
+  "jake.autoDetect": "off",
+  "gradle.autoDetect": "off"
+
 }
