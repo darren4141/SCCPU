@@ -35,6 +35,7 @@ module tb_cpu_add;
 
     // TEST CODE
 
+    expect_32(32'd0, `REG_X0);
     expect_32(32'd5, `REG_X1);
     expect_32(32'd14, `REG_X2);
     expect_32(32'd19, `REG_X3);

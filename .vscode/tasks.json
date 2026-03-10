@@ -205,7 +205,12 @@
       "description": "Choose an CPU test",
       "options": [
         "add",
-        "shift"
+        "shift",
+        "and",
+        "or",
+        "xor",
+        "set",
+        "store_load"
       ],
       "default": "add"
     },

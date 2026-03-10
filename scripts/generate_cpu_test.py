@@ -47,6 +47,8 @@ module tb_cpu_{name};
 
     // TEST CODE
 
+    expect_32(32'd0, `REG_X0);
+
     $finish;
   end
 
