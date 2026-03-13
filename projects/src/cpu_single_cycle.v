@@ -30,7 +30,7 @@ module cpu_single_cycle (
   );
 
   wire brEQ, brLT;
-  wire [14:0] control;
+  wire [17:0] control;
 
   control u_control (
       .inst({inst[30], inst[14:12], inst[6:2]}),
@@ -99,6 +99,7 @@ module cpu_single_cycle (
   dmem u_dmem (
       .clk  (clk),
       .dwe  (`CTRL_MEMRW(control)),
+      .size (`CTRL_MEMSIZE(control)),
       .addr (aluRes),
       .dataW(dataB),
       .dataR(dataR)

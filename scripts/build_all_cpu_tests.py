@@ -76,7 +76,7 @@ print(f"{'TOTAL':15} PASS: {total_passed:3}  FAIL: {total_failed:3}")
 print(f"{'='*50}")
 
 if total_failed == 0:
-    print(f"\033[92mAll tests passed!\033[0m")
+    print("\033[92mAll tests passed!\033[0m")
 else:
     print(f"\033[91m{total_failed} test(s) failed!\033[0m")
     sys.exit(1)

@@ -36,7 +36,11 @@ module tb_cpu_store_load;
     // TEST CODE
 
     expect_32(32'd0, `REG_X0);
-    expect_32(32'd14, `REG_X3);
+    expect_32(32'd2047, `REG_X3);
+    expect_32(32'd2047, `REG_X4);
+    // Expect sign extend
+    expect_32(32'hFFFFFFFF, `REG_X5);
+    expect_32(32'hFF, `REG_X6);
 
     $finish;
   end

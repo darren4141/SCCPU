@@ -2,12 +2,13 @@
 `include "control_defs.vh"
 `include "alu_defs.vh"
 `include "imm_gen.vh"
+`include "mem.vh"
 
 module control (
     input wire [8:0] inst,
     input wire brEQ,
     input wire brLT,
-    output reg [14:0] control
+    output reg [17:0] control
 );
 
   wire [6:0] opcode = {inst[4:0], 2'b11};
@@ -15,7 +16,7 @@ module control (
   wire funct7 = inst[8];
 
   always @(*) begin
-    control = 15'b0;
+    control = 18'b0;
     case (opcode)
 
       /* R-Format Arithmetic Operations
@@ -27,6 +28,7 @@ module control (
         - aSel = 0
         - ALUSel based on funct3 and funct7
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 1
     */
       `OPCODE_ARITH_OP: begin
@@ -39,6 +41,7 @@ module control (
           1'b0,  //aSel
           `OP_INVALID,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b01  // WBSel
         };
 
@@ -76,6 +79,7 @@ module control (
         - aSel = 0
         - ALUSel based on funct3 and funct7
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 1
     */
 
@@ -89,6 +93,7 @@ module control (
           1'b0,  //aSel
           `OP_INVALID,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b01  // WBSel
         };
 
@@ -121,6 +126,7 @@ module control (
         - aSel = 0
         - ALUSel = OP_ADD
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 0
     */
 
@@ -134,8 +140,18 @@ module control (
           1'b0,  //aSel
           `OP_ADD,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b00  // WBSel
         };
+
+        case (funct3)
+          `FUNCT3_LB: `CTRL_MEMSIZE(control) = `DMEM_TYPE_B;
+          `FUNCT3_LH: `CTRL_MEMSIZE(control) = `DMEM_TYPE_H;
+          `FUNCT3_LW: `CTRL_MEMSIZE(control) = `DMEM_TYPE_W;
+          `FUNCT3_LBU: `CTRL_MEMSIZE(control) = `DMEM_TYPE_BU;
+          `FUNCT3_LHU: `CTRL_MEMSIZE(control) = `DMEM_TYPE_HU;
+          default: ;
+        endcase
       end
 
       /* Store Operations
@@ -147,6 +163,7 @@ module control (
         - aSel = 0
         - ALUSel = OP_ADD
         - MemRW = 1
+        - MemSize = DC
         - WBSel = DC
     */
 
@@ -160,8 +177,16 @@ module control (
           1'b0,  //aSel
           `OP_ADD,  //ALUSel
           1'b1,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b00  // WBSel
         };
+
+        case (funct3)
+          `FUNCT3_SB: `CTRL_MEMSIZE(control) = `DMEM_TYPE_B;
+          `FUNCT3_SH: `CTRL_MEMSIZE(control) = `DMEM_TYPE_H;
+          `FUNCT3_SW: `CTRL_MEMSIZE(control) = `DMEM_TYPE_W;
+          default: ;
+        endcase
       end
 
       /* Branch Operations
@@ -173,6 +198,7 @@ module control (
         - aSel = 1
         - ALUSel = OP_ADD
         - MemRW = 0
+        - MemSize = DC
         - WBSel = DC
     */
 
@@ -186,6 +212,7 @@ module control (
           1'b1,  //aSel
           `OP_ADD,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b00  // WBSel
         };
         case (funct3)
@@ -213,6 +240,7 @@ module control (
         - aSel = 1
         - ALUSel = OP_ADD
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 2
     */
 
@@ -226,6 +254,7 @@ module control (
           1'b1,  //aSel
           `OP_ADD,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b10  // WBSel
         };
       end
@@ -239,6 +268,7 @@ module control (
         - aSel = 0
         - ALUSel = OP_ADD
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 2
     */
 
@@ -252,6 +282,7 @@ module control (
           1'b0,  //aSel
           `OP_ADD,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b10  // WBSel
         };
       end
@@ -265,6 +296,7 @@ module control (
         - aSel = DC
         - ALUSel = OP_PASSTHROUGH_B
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 2
     */
 
@@ -278,6 +310,7 @@ module control (
           1'b0,  //aSel
           `OP_PASSTHROUGH_B,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b10  // WBSel
         };
       end
@@ -291,6 +324,7 @@ module control (
         - aSel = 1
         - ALUSel = OP_ADD
         - MemRW = 0
+        - MemSize = DC
         - WBSel = 2
     */
 
@@ -304,6 +338,7 @@ module control (
           1'b1,  //aSel
           `OP_ADD,  //ALUSel
           1'b0,  // MemRW
+          `DMEM_TYPE_INVALID,  // MemSize
           2'b10  // WBSel
         };
       end
