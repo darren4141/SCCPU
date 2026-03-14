@@ -54,9 +54,7 @@ module tb_cpu_{name};
 
 endmodule
 """,
-    Path(f"projects/programs/cpu_{name}_program.s"): f"""
-    
-"""
+    Path(f"projects/programs/cpu_{name}_program.s"): """"""
 }
 
 for path, content in files.items():

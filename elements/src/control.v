@@ -297,10 +297,10 @@ module control (
         - ALUSel = OP_PASSTHROUGH_B
         - MemRW = 0
         - MemSize = DC
-        - WBSel = 2
+        - WBSel = 1
     */
 
-      `OPCODE_JALR: begin
+      `OPCODE_LUI: begin
         control = {
           1'b0,  // PCSel
           `FORMAT_U,  // ImmSel
@@ -311,7 +311,7 @@ module control (
           `OP_PASSTHROUGH_B,  //ALUSel
           1'b0,  // MemRW
           `DMEM_TYPE_INVALID,  // MemSize
-          2'b10  // WBSel
+          2'b01  // WBSel
         };
       end
 
@@ -325,7 +325,7 @@ module control (
         - ALUSel = OP_ADD
         - MemRW = 0
         - MemSize = DC
-        - WBSel = 2
+        - WBSel = 1
     */
 
       `OPCODE_AUIPC: begin
@@ -339,7 +339,7 @@ module control (
           `OP_ADD,  //ALUSel
           1'b0,  // MemRW
           `DMEM_TYPE_INVALID,  // MemSize
-          2'b10  // WBSel
+          2'b01  // WBSel
         };
       end
 

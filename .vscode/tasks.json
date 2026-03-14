@@ -210,7 +210,12 @@
         "or",
         "xor",
         "set",
-        "store_load"
+        "store_load",
+        "branch",
+        "jal",
+        "jalr",
+        "lui",
+        "auipc"
       ],
       "default": "add"
     },
