@@ -1,10 +1,10 @@
 `include "constants.vh"
-`include "control_defs.vh"
+`include "ss_control_defs.vh"
 `include "alu_defs.vh"
 `include "imm_gen.vh"
 `include "mem.vh"
 
-module control (
+module ss_control (
     input wire [8:0] inst,
     input wire brEQ,
     input wire brLT,

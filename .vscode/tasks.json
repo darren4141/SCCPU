@@ -127,7 +127,7 @@
         "elements/src/adder.v",
         "elements/src/alu.v",
         "elements/src/bcomp.v",
-        "elements/src/control.v",
+        "elements/src/ss_control.v",
         "elements/src/dmem.v",
         "elements/src/imem.v",
         "elements/src/imm_gen.v",
@@ -195,7 +195,11 @@
         "dmem",
         "pc",
         "bcomp",
-        "control"
+        "ss_control",
+        "if_reg",
+        "id_reg",
+        "ex_reg",
+        "m_reg"
       ],
       "default": "alu"
     },

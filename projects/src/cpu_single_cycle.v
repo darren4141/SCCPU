@@ -1,4 +1,4 @@
-`include "control_defs.vh"
+`include "ss_control_defs.vh"
 
 module cpu_single_cycle (
     input wire clk,
@@ -32,7 +32,7 @@ module cpu_single_cycle (
   wire brEQ, brLT;
   wire [17:0] control;
 
-  control u_control (
+  ss_control u_control (
       .inst({inst[30], inst[14:12], inst[6:2]}),
       .brEQ(brEQ),
       .brLT(brLT),
