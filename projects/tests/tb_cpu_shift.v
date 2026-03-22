@@ -31,13 +31,15 @@ module tb_cpu_shift;
     #10;
     rst = 0;
 
-    repeat (10) @(posedge clk);
+    repeat (20) @(posedge clk);
 
     // TEST CODE
 
     expect_32(32'd0, `REG_X0);
-    expect_32(32'd28, `REG_X3);
-    expect_32(32'd3, `REG_X4);
+    expect_32(32'd28, `REG_X3);  // 7 << 2 = 28
+    expect_32(32'd3, `REG_X4);  // 7 >> 1 = 3
+    expect_32(32'd4, `REG_X7);  // 32 >> 3 = 4 (arithmetic, positive)
+    expect_32(32'hFFFFFFFC, `REG_X10);  // -16 >> 2 = -4 (arithmetic, preserves sign)
 
     $finish;
   end

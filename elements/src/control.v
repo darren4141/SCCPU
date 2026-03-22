@@ -48,8 +48,8 @@ module control (
         case (funct3)
           `FUNCT3_ADD_SUB: begin
             case (funct7)
-              7'h0:    `CTRL_ALUSEL(control) = `OP_ADD;
-              7'h20:   `CTRL_ALUSEL(control) = `OP_SUB;
+              1'h0:    `CTRL_ALUSEL(control) = `OP_ADD;
+              1'h1:   `CTRL_ALUSEL(control) = `OP_SUB;
               default: `CTRL_ALUSEL(control) = `OP_INVALID;
             endcase
           end
@@ -59,8 +59,8 @@ module control (
           `FUNCT3_SLL:  `CTRL_ALUSEL(control) = `OP_SLL;
           `FUNCT3_SRL_SRA: begin
             case (funct7)
-              7'h0:    `CTRL_ALUSEL(control) = `OP_SRL;
-              7'h20:   `CTRL_ALUSEL(control) = `OP_SRA;
+              1'h0:    `CTRL_ALUSEL(control) = `OP_SRL;
+              1'h1:   `CTRL_ALUSEL(control) = `OP_SRA;
               default: `CTRL_ALUSEL(control) = `OP_INVALID;
             endcase
           end
@@ -105,8 +105,8 @@ module control (
           `FUNCT3_SLL:     `CTRL_ALUSEL(control) = `OP_SLL;
           `FUNCT3_SRL_SRA: begin
             case (funct7)
-              7'h0:    `CTRL_ALUSEL(control) = `OP_SRL;
-              7'h20:   `CTRL_ALUSEL(control) = `OP_SRA;
+              1'h0:    `CTRL_ALUSEL(control) = `OP_SRL;
+              1'h1:   `CTRL_ALUSEL(control) = `OP_SRA;
               default: `CTRL_ALUSEL(control) = `OP_INVALID;
             endcase
           end
