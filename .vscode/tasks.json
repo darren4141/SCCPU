@@ -195,11 +195,12 @@
         "dmem",
         "pc",
         "bcomp",
-        "ss_control",
         "if_reg",
         "id_reg",
         "ex_reg",
-        "m_reg"
+        "m_reg",
+        "ss_control",
+        "pipeline_control"
       ],
       "default": "alu"
     },

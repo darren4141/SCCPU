@@ -126,7 +126,7 @@ module ss_control (
         - aSel = 0
         - ALUSel = OP_ADD
         - MemRW = 0
-        - MemSize = DC
+        - MemSize = depends on funct3
         - WBSel = 0
     */
 
@@ -163,7 +163,7 @@ module ss_control (
         - aSel = 0
         - ALUSel = OP_ADD
         - MemRW = 1
-        - MemSize = DC
+        - MemSize = depends on funct3
         - WBSel = DC
     */
 

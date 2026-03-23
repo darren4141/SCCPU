@@ -21,15 +21,12 @@ module tb_ss_control;
       .control(control)
   );
 
-  // Helper function to construct 9-bit instruction
-  // Format: {funct7, funct3, opcode_lower[4:0]}
   function [8:0] make_inst(input [6:0] funct7, input [2:0] funct3, input [6:0] opcode);
     begin
       make_inst = {funct7[5], funct3, opcode[6:2]};
     end
   endfunction
 
-  // Test helper task
   task test_instruction(input [8:0] test_inst, input br_eq, input br_lt,
                         input [17:0] expected_control, input string desc);
     begin
