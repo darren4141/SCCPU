@@ -35,6 +35,7 @@ module tb_pipeline_control;
                      input br_eq, input br_lt,
                      input [10:0] expected_ex, input [3:0] expected_m, input [2:0] expected_wb,
                      input string desc);
+    reg [17:0] expected_control;
     begin
       inst_ex = ex_inst;
       inst_m = m_inst;
@@ -43,21 +44,8 @@ module tb_pipeline_control;
       brLT = br_lt;
       #1;
       $display("%s", desc);
-      if (control[17:7] !== expected_ex) begin
-        $display("FAIL: EX stage - expected %011b got %011b", expected_ex, control[17:7]);
-      end else begin
-        $display("PASS: EX stage");
-      end
-      if (control[6:3] !== expected_m) begin
-        $display("FAIL: M stage - expected %04b got %04b", expected_m, control[6:3]);
-      end else begin
-        $display("PASS: M stage");
-      end
-      if (control[2:0] !== expected_wb) begin
-        $display("FAIL: WB stage - expected %03b got %03b", expected_wb, control[2:0]);
-      end else begin
-        $display("PASS: WB stage");
-      end
+      expected_control = {expected_ex, expected_m, expected_wb};
+      expect_32(expected_control, control);
     end
   endtask
 

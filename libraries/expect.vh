@@ -13,8 +13,8 @@ task automatic expect_17;
   input [16:0] actual;
   begin
     if (actual !== expected) begin
-      $display("FAIL: expected %0b got %0b", expected, actual);
-    end else $display("PASS: expected %0b got %0b", expected, actual);
+      $display("FAIL: expected %0d got %0d", expected, actual);
+    end else $display("PASS: expected %0d got %0d", expected, actual);
   end
 endtask
 
