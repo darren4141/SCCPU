@@ -29,7 +29,7 @@ subprocess.run(["python", "scripts/format_hex.py", f"build/hex/cpu_{test_name}_p
 
 # Compile and run the simulation
 commands = [
-    ["iverilog", "-g2012", "-I", "elements/inc", "-I", "libraries", "-o", f"build/sim/projects/cpu_{test_name}_sim", "projects/src/cpu_single_cycle.v", "elements/src/adder.v", "elements/src/alu.v", "elements/src/bcomp.v", "elements/src/ss_control.v", "elements/src/dmem.v", "elements/src/imem.v", "elements/src/imm_gen.v", "elements/src/muxes.v", "elements/src/pc.v", "elements/src/regfile.v", f"projects/tests/tb_cpu_{test_name}.v"],
+    ["iverilog", "-g2012", "-I", "elements/inc", "-I", "libraries", "-o", f"build/sim/projects/cpu_{test_name}_sim", "projects/src/cpu_single_cycle.v", "elements/src/adder.v", "elements/src/alu.v", "elements/src/bcomp.v", "elements/src/control.v", "elements/src/dmem.v", "elements/src/imem.v", "elements/src/imm_gen.v", "elements/src/muxes.v", "elements/src/pc.v", "elements/src/regfile.v", f"projects/tests/tb_cpu_{test_name}.v"],
     ["vvp", f"build/sim/projects/cpu_{test_name}_sim"],
 ]
 

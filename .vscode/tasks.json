@@ -127,7 +127,7 @@
         "elements/src/adder.v",
         "elements/src/alu.v",
         "elements/src/bcomp.v",
-        "elements/src/ss_control.v",
+        "elements/src/control.v",
         "elements/src/dmem.v",
         "elements/src/imem.v",
         "elements/src/imm_gen.v",
@@ -199,8 +199,9 @@
         "id_reg",
         "ex_reg",
         "m_reg",
-        "ss_control",
-        "pipeline_control"
+        "control",
+        "pipeline_psd_control",
+        "forwarding"
       ],
       "default": "alu"
     },

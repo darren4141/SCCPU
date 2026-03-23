@@ -1,4 +1,4 @@
-`include "ss_control_defs.vh"
+`include "pipeline_psd_control_defs.vh"
 `include "imm_gen.vh"
 `include "mem.vh"
 `include "alu_defs.vh"
@@ -6,7 +6,7 @@
 
 `timescale 1ns / 1ps
 
-module tb_pipeline_control;
+module tb_pipeline_psd_control;
   `include "expect.vh"
 
   reg [8:0] inst_ex;
@@ -16,7 +16,7 @@ module tb_pipeline_control;
   reg brLT;
   wire [17:0] control;
 
-  pipeline_control uut (
+  pipeline_psd_control uut (
       .inst_ex(inst_ex),
       .inst_m(inst_m),
       .inst_wb(inst_wb),
@@ -50,8 +50,8 @@ module tb_pipeline_control;
   endtask
 
   initial begin
-    $dumpfile("build/vcd/elements/pipeline_control_wave.vcd");
-    $dumpvars(0, tb_pipeline_control);
+    $dumpfile("build/vcd/elements/pipeline_psd_control_wave.vcd");
+    $dumpvars(0, tb_pipeline_psd_control);
 
     // ============================================================
     // Test 1: R-format ADD in EX, Load in M, Arithmetic in WB

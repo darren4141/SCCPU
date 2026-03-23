@@ -1,10 +1,12 @@
+// Per-stage decode model for pipelined control-logic
+
 `include "constants.vh"
-`include "pipeline_control_defs.vh"
+`include "pipeline_psd_control_defs.vh"
 `include "alu_defs.vh"
 `include "imm_gen.vh"
 `include "mem.vh"
 
-module pipeline_control (
+module pipeline_psd_control (
     input wire [8:0] inst_ex,
     input wire [8:0] inst_m,
     input wire [8:0] inst_wb,

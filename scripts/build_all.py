@@ -86,10 +86,10 @@ for element, results in test_results.items():
         color = "\033[91m" # RED
     reset = "\033[0m"
     
-    print(f"{color}{element:15}{reset} PASS: {passed:3}  FAIL: {failed:3}")
+    print(f"{color}{element:20}{reset} PASS: {passed:3}  FAIL: {failed:3}")
 
 print(f"{'-'*50}")
-print(f"{'TOTAL':15} PASS: {total_passed:3}  FAIL: {total_failed:3}")
+print(f"{'TOTAL':20} PASS: {total_passed:3}  FAIL: {total_failed:3}")
 print(f"{'='*50}")
 
 if total_failed == 0:

@@ -1,4 +1,4 @@
-`include "ss_control_defs.vh"
+`include "control_defs.vh"
 `include "imm_gen.vh"
 `include "mem.vh"
 `include "alu_defs.vh"
@@ -6,7 +6,7 @@
 
 `timescale 1ns / 1ps
 
-module tb_ss_control;
+module tb_control;
   `include "expect.vh"
 
   reg [8:0] inst;
@@ -14,7 +14,7 @@ module tb_ss_control;
   reg brLT;
   wire [17:0] control;
 
-  ss_control uut (
+  control uut (
       .inst(inst),
       .brEQ(brEQ),
       .brLT(brLT),
@@ -40,8 +40,8 @@ module tb_ss_control;
   endtask
 
   initial begin
-    $dumpfile("build/vcd/elements/ss_control_wave.vcd");
-    $dumpvars(0, tb_ss_control);
+    $dumpfile("build/vcd/elements/control_wave.vcd");
+    $dumpvars(0, tb_control);
 
     // ============================================================
     // R-FORMAT ARITHMETIC OPERATIONS
