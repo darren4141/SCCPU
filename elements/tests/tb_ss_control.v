@@ -267,13 +267,13 @@ module tb_ss_control;
 
     // BLTU with condition TRUE (brLT=1, unsigned)
     test_instruction(
-        make_inst(7'h0, `FUNCT3_BTLU, `OPCODE_BRANCH), 1'b0, 1'b1, {
+        make_inst(7'h0, `FUNCT3_BLTU, `OPCODE_BRANCH), 1'b0, 1'b1, {
         1'b1, `FORMAT_B, 1'b0, 1'b1, 1'b1, 1'b1, `OP_ADD, 1'b0, `DMEM_TYPE_INVALID, 2'b00},
         "BLTU: Branch if less than unsigned (condition true)");
 
     // BLTU with condition FALSE (brLT=0, unsigned)
     test_instruction(
-        make_inst(7'h0, `FUNCT3_BTLU, `OPCODE_BRANCH), 1'b0, 1'b0, {
+        make_inst(7'h0, `FUNCT3_BLTU, `OPCODE_BRANCH), 1'b0, 1'b0, {
         1'b0, `FORMAT_B, 1'b0, 1'b1, 1'b1, 1'b1, `OP_ADD, 1'b0, `DMEM_TYPE_INVALID, 2'b00},
         "BLTU: Branch if less than unsigned (condition false)");
 

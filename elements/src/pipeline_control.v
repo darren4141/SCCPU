@@ -175,14 +175,14 @@ module pipeline_control (
 
         case (funct3_ex)
           `FUNCT3_BEQ, `FUNCT3_BNE, `FUNCT3_BLT, `FUNCT3_BGE: `CTRL_EX_BRUN(control_ex) = 0;
-          `FUNCT3_BTLU, `FUNCT3_BGEU: `CTRL_EX_BRUN(control_ex) = 1;
+          `FUNCT3_BLTU, `FUNCT3_BGEU: `CTRL_EX_BRUN(control_ex) = 1;
           default: `CTRL_EX_BRUN(control_ex) = 0;
         endcase
 
         case (funct3_ex)
           `FUNCT3_BEQ: `CTRL_EX_PCSEL(control_ex) = brEQ;
           `FUNCT3_BNE: `CTRL_EX_PCSEL(control_ex) = ~brEQ;
-          `FUNCT3_BLT, `FUNCT3_BTLU: `CTRL_EX_PCSEL(control_ex) = brLT;
+          `FUNCT3_BLT, `FUNCT3_BLTU: `CTRL_EX_PCSEL(control_ex) = brLT;
           `FUNCT3_BGE, `FUNCT3_BGEU: `CTRL_EX_PCSEL(control_ex) = ~brLT;
           default: `CTRL_EX_PCSEL(control_ex) = 0;
         endcase

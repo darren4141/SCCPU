@@ -217,14 +217,14 @@ module ss_control (
         };
         case (funct3)
           `FUNCT3_BEQ, `FUNCT3_BNE, `FUNCT3_BLT, `FUNCT3_BGE: `CTRL_BRUN(control) = 0;
-          `FUNCT3_BTLU, `FUNCT3_BGEU: `CTRL_BRUN(control) = 1;
+          `FUNCT3_BLTU, `FUNCT3_BGEU: `CTRL_BRUN(control) = 1;
           default: `CTRL_BRUN(control) = 0;
         endcase
 
         case (funct3)
           `FUNCT3_BEQ: `CTRL_PCSEL(control) = brEQ;
           `FUNCT3_BNE: `CTRL_PCSEL(control) = ~brEQ;
-          `FUNCT3_BLT, `FUNCT3_BTLU: `CTRL_PCSEL(control) = brLT;
+          `FUNCT3_BLT, `FUNCT3_BLTU: `CTRL_PCSEL(control) = brLT;
           `FUNCT3_BGE, `FUNCT3_BGEU: `CTRL_PCSEL(control) = ~brLT;
           default: `CTRL_PCSEL(control) = 0;
         endcase

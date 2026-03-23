@@ -15,7 +15,7 @@
 `define FUNCT3_BNE 3'h1
 `define FUNCT3_BLT 3'h4
 `define FUNCT3_BGE 3'h5
-`define FUNCT3_BTLU 3'h6
+`define FUNCT3_BLTU 3'h6
 `define FUNCT3_BGEU 3'h7
 
 // I-format load funct3 definitions
