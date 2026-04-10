@@ -69,11 +69,10 @@ module forwarding (
 
     end
 
-    // Condition to check if m instruction is writing a valid rd
+    // Condition to check if m instruction is writing a valid rd (m instruction cannot be load)
     if (RegWen_m &&
     (opcode_m == `OPCODE_ARITH_OP ||
     opcode_m == `OPCODE_ARITH_OP_IMM ||
-    opcode_m == `OPCODE_LOAD ||
     opcode_m == `OPCODE_LUI ||
     opcode_m == `OPCODE_AUIPC)) begin
 

@@ -9,30 +9,34 @@ if len(sys.argv) < 2:
 name = sys.argv[1]
 
 files = {
-    Path(f"elements/src/{name}.v"): f"""module {name}();
+    Path(f"elements/src/{name}.v"): 
+f"""module {name} ();
 
-always @(*) begin
+  always @(*) begin
 
-end
+  end
 
 endmodule
+
 """,
-    Path(f"elements/tests/tb_{name}.v"): f"""`timescale 1ns/1ps
+    Path(f"elements/tests/tb_{name}.v"): 
+f"""`timescale 1ns / 1ps
 
 module tb_{name};
-    `include "expect.vh"
-    
-    {name} uut();
+  `include "expect.vh"
 
-    initial begin
-        $dumpfile("build/vcd/elements/{name}_wave.vcd");
-        $dumpvars(0, tb_{name});
+{name} uut ();
 
-        #10;
-        $finish;
-    end
+  initial begin
+    $dumpfile("build/vcd/elements/{name}_wave.vcd");
+    $dumpvars(0, tb_{name});
+
+    #10;
+    $finish;
+  end
 
 endmodule
+
 """
 }
 
