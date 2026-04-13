@@ -8,6 +8,16 @@ import re
 from pathlib import Path
 from collections import defaultdict
 
+# Parse command-line argument for CPU type
+cpu_type = "--single-cycle"  # Default
+if len(sys.argv) > 1:
+    if sys.argv[1] in ["--pipelined", "--single-cycle"]:
+        cpu_type = sys.argv[1]
+        sys.argv.pop(1)  # Remove the CPU type arg so it doesn't interfere with other processing
+    else:
+        print(f"Usage: build_all_cpu_tests.py [--pipelined|--single-cycle]")
+        sys.exit(1)
+
 # RV32I base instruction set
 RV32I_INSTRUCTIONS = {
     # Arithmetic
@@ -109,7 +119,7 @@ for test in cpu_tests:
     all_tested_instructions.update(test_instructions)
     
     # Run the CPU test script (handles assembly, hex generation, build, and run)
-    run_cmd = ["python", "scripts/run_cpu_test.py", test]
+    run_cmd = ["python", "scripts/run_cpu_test.py", test, cpu_type]
     
     print(f"Building and running {test}...")
     result = subprocess.run(run_cmd, capture_output=True, text=True)
@@ -143,10 +153,10 @@ for test, results in test_results.items():
         color = "\033[91m" # RED
     reset = "\033[0m"
     
-    print(f"{color}{test:15}{reset} PASS: {passed:3}  FAIL: {failed:3}")
+    print(f"{color}{test:20}{reset} PASS: {passed:3}  FAIL: {failed:3}")
 
 print(f"{'-'*50}")
-print(f"{'TOTAL':15} PASS: {total_passed:3}  FAIL: {total_failed:3}")
+print(f"{'TOTAL':20} PASS: {total_passed:3}  FAIL: {total_failed:3}")
 print(f"{'='*50}")
 
 # Instruction coverage diagnostics

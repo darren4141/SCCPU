@@ -8,10 +8,17 @@ module tb_cpu_shift_imm;
   reg clk;
   reg rst;
 
+`ifdef CPU_PIPELINED
+  cpu_pipelined dut (
+      .clk(clk),
+      .rst(rst)
+  );
+`else
   cpu_single_cycle dut (
       .clk(clk),
       .rst(rst)
   );
+`endif
 
   initial begin
     clk = 0;
@@ -25,6 +32,12 @@ module tb_cpu_shift_imm;
   initial begin
     $dumpfile("build/vcd/projects/tb_cpu_shift_imm.vcd");
     $dumpvars(0, tb_cpu_shift_imm);
+
+`ifdef CPU_PIPELINED
+    $display("PIPELINED CPU TEST");
+`else
+    $display("SINGLE CYCLE CPU TEST");
+`endif
 
     #10;
     rst = 1;

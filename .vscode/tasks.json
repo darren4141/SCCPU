@@ -114,15 +114,16 @@
       "problemMatcher": []
     },
     {
-      "label": "Build Verilog CPU Test",
+      "label": "Build Verilog SCCPU Test",
       "type": "shell",
       "command": "iverilog",
       "args": [
         "-g2012",
         "-I", "elements/inc",
         "-I", "libraries",
+        "-I", "projects/inc",
         "-o",
-        "build/sim/projects/$cpu_{input:cpuTestNameSelect}_sim",
+        "build/sim/projects/cpu_${input:cpuTestNameSelect}_sim",
         "projects/src/cpu_single_cycle.v",
         "elements/src/adder.v",
         "elements/src/alu.v",
@@ -143,22 +144,23 @@
       "problemMatcher": "$gcc"
     },
     {
-      "label": "Run Verilog CPU Test",
+      "label": "Run Verilog SCCPU Test",
       "type": "shell",
       "command": "vvp",
       "args": [
         "build/sim/projects/$cpu_{input:cpuTestNameSelect}_sim"
       ],
-      "dependsOn": "Build Verilog CPU Test",
+      "dependsOn": "Build Verilog SCCPU Test",
       "problemMatcher": "$gcc"
     },
     {
-      "label": "Build and Run Verilog CPU Test",
+      "label": "Build and Run Verilog SCCPU Test",
       "type": "shell",
       "command": "python",
       "args": [
         "scripts/run_cpu_test.py",
-        "${input:cpuTestNameSelect}"
+        "${input:cpuTestNameSelect}",
+        "--single-cycle"
       ],
       "group": {
         "kind": "build",
@@ -167,11 +169,91 @@
       "problemMatcher": "$gcc"
     },
     {
-      "label": "Build and Run All CPU Tests",
+      "label": "Build and Run All SCCPU Tests",
       "type": "shell",
       "command": "python",
       "args": [
-        "scripts/build_all_cpu_tests.py"
+        "scripts/build_all_cpu_tests.py",
+        "--single-cycle"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
+    },
+
+    {      
+      "label": "Build Verilog Pipelined CPU Test",
+      "type": "shell",
+      "command": "iverilog",
+      "args": [
+        "-g2012",
+        "-DCPU_PIPELINED",
+        "-I", "elements/inc",
+        "-I", "libraries",
+        "-I", "projects/inc",
+        "-o",
+        "build/sim/projects/cpu_${input:cpuTestNameSelect}_sim",
+        "projects/src/cpu_pipelined.v",
+        "elements/src/adder.v",
+        "elements/src/alu.v",
+        "elements/src/bcomp.v",
+        "elements/src/control.v",
+        "elements/src/dmem.v",
+        "elements/src/ex_reg.v",
+        "elements/src/flush.v",
+        "elements/src/forwarding.v",
+        "elements/src/id_reg.v",
+        "elements/src/if_reg.v",
+        "elements/src/imem.v",
+        "elements/src/imm_gen.v",
+        "elements/src/m_reg.v",
+        "elements/src/muxes.v",
+        "elements/src/pc.v",
+        "elements/src/pipeline_psd_control.v",
+        "elements/src/regfile.v",
+        "elements/src/stalling.v",
+        "projects/tests/tb_cpu_${input:cpuTestNameSelect}.v"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Run Verilog Pipelined CPU Test",
+      "type": "shell",
+      "command": "vvp",
+      "args": [
+        "build/sim/projects/$cpu_{input:cpuTestNameSelect}_sim"
+      ],
+      "dependsOn": "Build Verilog Pipelined CPU Test",
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Build and Run Verilog Pipelined CPU Test",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/run_cpu_test.py",
+        "${input:cpuTestNameSelect}",
+        "--pipelined"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$gcc"
+    },
+    {
+      "label": "Build and Run All Pipelined CPU Tests",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/build_all_cpu_tests.py",
+        "--pipelined"
       ],
       "group": {
         "kind": "build",
@@ -217,6 +299,7 @@
         "xor",
         "set",
         "store_load",
+        "load_with_offset",
         "branch",
         "jal",
         "jalr",

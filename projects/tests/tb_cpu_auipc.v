@@ -8,10 +8,17 @@ module tb_cpu_auipc;
   reg clk;
   reg rst;
 
+`ifdef CPU_PIPELINED
+  cpu_pipelined dut (
+      .clk(clk),
+      .rst(rst)
+  );
+`else
   cpu_single_cycle dut (
       .clk(clk),
       .rst(rst)
   );
+`endif
 
   initial begin
     clk = 0;
@@ -26,12 +33,18 @@ module tb_cpu_auipc;
     $dumpfile("build/vcd/projects/tb_cpu_auipc.vcd");
     $dumpvars(0, tb_cpu_auipc);
 
+`ifdef CPU_PIPELINED
+    $display("PIPELINED CPU TEST");
+`else
+    $display("SINGLE CYCLE CPU TEST");
+`endif
+
     #10;
     rst = 1;
     #10;
     rst = 0;
 
-    repeat (10) @(posedge clk);
+    repeat (50) @(posedge clk);
 
     // TEST CODE
 

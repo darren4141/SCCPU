@@ -20,10 +20,17 @@ module tb_cpu_{name};
   reg clk;
   reg rst;
 
-  cpu_single_cycle dut (
-      .clk(clk),
-      .rst(rst)
-  );
+  `ifdef CPU_PIPELINED
+    cpu_pipelined dut (
+        .clk(clk),
+        .rst(rst)
+    );
+  `else
+    cpu_single_cycle dut (
+        .clk(clk),
+        .rst(rst)
+    );
+  `endif
 
   initial begin
     clk = 0;
@@ -43,7 +50,7 @@ module tb_cpu_{name};
     #10;
     rst = 0;
 
-    repeat (10) @(posedge clk);
+    repeat (50) @(posedge clk);
 
     // TEST CODE
 
