@@ -15,15 +15,15 @@ addi x2, x2, 5
 # x2 should be 10
 jump2:
 
-# we should take this branch
+# we should take this branch, x3 = 6, x2 = 10
 blt x3, x2, jump3
 addi x2, x2, 100
 # x2 should still be 10
 
 jump3:
 beq x3, x2, jump4
-addi x2, x2, 100
-# x2 should still be 10
+addi x2, x2, 50
+# x2 should be 60
 
 jump4:
 addi x7, x7, 9

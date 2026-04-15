@@ -42,8 +42,13 @@ module tb_cpu_{name};
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_{name}.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_{name}.vcd");
     $dumpvars(0, tb_cpu_{name});
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_{name}.vcd");
+    $dumpvars(0, tb_cpu_{name});
+`endif
 
     #10;
     rst = 1;

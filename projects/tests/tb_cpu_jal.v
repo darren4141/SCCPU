@@ -30,8 +30,13 @@ module tb_cpu_jal;
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_jal.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_jal.vcd");
     $dumpvars(0, tb_cpu_jal);
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_jal.vcd");
+    $dumpvars(0, tb_cpu_jal);
+`endif
 
 `ifdef CPU_PIPELINED
     $display("PIPELINED CPU TEST");

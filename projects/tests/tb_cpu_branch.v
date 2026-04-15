@@ -30,8 +30,13 @@ module tb_cpu_branch;
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_branch.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_branch.vcd");
     $dumpvars(0, tb_cpu_branch);
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_branch.vcd");
+    $dumpvars(0, tb_cpu_branch);
+`endif
 
 `ifdef CPU_PIPELINED
     $display("PIPELINED CPU TEST");
@@ -50,7 +55,7 @@ module tb_cpu_branch;
 
     expect_32(32'd0, `REG_X0);
     expect_32(32'd0, `REG_X1);
-    expect_32(32'd10, `REG_X2);
+    expect_32(32'd60, `REG_X2);
     expect_32(32'd6, `REG_X3);
 
     $finish;

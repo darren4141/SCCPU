@@ -30,8 +30,13 @@ module tb_cpu_load_with_offset;
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_load_with_offset.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_load_with_offset.vcd");
     $dumpvars(0, tb_cpu_load_with_offset);
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_load_with_offset.vcd");
+    $dumpvars(0, tb_cpu_load_with_offset);
+`endif
 
 `ifdef CPU_PIPELINED
     $display("PIPELINED CPU TEST");

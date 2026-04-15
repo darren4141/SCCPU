@@ -30,8 +30,13 @@ module tb_cpu_or;
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_or.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_or.vcd");
     $dumpvars(0, tb_cpu_or);
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_or.vcd");
+    $dumpvars(0, tb_cpu_or);
+`endif
 
 `ifdef CPU_PIPELINED
     $display("PIPELINED CPU TEST");

@@ -11,3 +11,4 @@ sw x2, 0(x1)        # Store x2 at address 0
 lhu x4, 0(x1)       # Load bits 15:0 from address 0
 lhu x5, 2(x1)       # Load bits 15:0 from address 2 (upper half of original word)
 
+

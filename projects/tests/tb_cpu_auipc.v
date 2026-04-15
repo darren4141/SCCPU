@@ -30,8 +30,13 @@ module tb_cpu_auipc;
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_auipc.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_auipc.vcd");
     $dumpvars(0, tb_cpu_auipc);
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_auipc.vcd");
+    $dumpvars(0, tb_cpu_auipc);
+`endif
 
 `ifdef CPU_PIPELINED
     $display("PIPELINED CPU TEST");

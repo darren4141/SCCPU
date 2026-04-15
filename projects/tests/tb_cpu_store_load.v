@@ -30,8 +30,13 @@ module tb_cpu_store_load;
   end
 
   initial begin
-    $dumpfile("build/vcd/projects/tb_cpu_store_load.vcd");
+`ifdef CPU_PIPELINED
+    $dumpfile("build/vcd/projects/pipelined/tb_cpu_store_load.vcd");
     $dumpvars(0, tb_cpu_store_load);
+`else
+    $dumpfile("build/vcd/projects/single_cycle/tb_cpu_store_load.vcd");
+    $dumpvars(0, tb_cpu_store_load);
+`endif
 
 `ifdef CPU_PIPELINED
     $display("PIPELINED CPU TEST");
