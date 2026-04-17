@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import subprocess
 import sys
+import json
+from pathlib import Path
 
 # Get CPU test name from command-line argument
 if len(sys.argv) < 2:
@@ -13,13 +15,38 @@ cpu_type = sys.argv[2] if len(sys.argv) > 2 else "--single-cycle"
 # Determine CPU type and set appropriate flags
 if cpu_type == "--pipelined":
     cpu_define = "-DCPU_PIPELINED"
+    task_label = "Build Verilog Pipelined CPU Test"
     print(f"Building and running test: {test_name} (Pipelined CPU)\n")
 elif cpu_type == "--single-cycle":
     cpu_define = "-DCPU_SINGLE_CYCLE"
+    task_label = "Build Verilog SCCPU Test"
     print(f"Building and running test: {test_name} (Single-Cycle CPU)\n")
 else:
     print(f"Usage: run_cpu_test.py <test_name> [--pipelined|--single-cycle]")
     sys.exit(1)
+
+# Read tasks.json to get the iverilog command arguments
+tasks_file = Path(".vscode/tasks.json")
+with open(tasks_file, 'r') as f:
+    tasks_data = json.load(f)
+
+# Find the appropriate task
+task_args = None
+for task in tasks_data.get("tasks", []):
+    if task.get("label") == task_label:
+        task_args = task.get("args", [])
+        break
+
+if task_args is None:
+    print(f"Error: Could not find task '{task_label}' in tasks.json")
+    sys.exit(1)
+
+# Replace input variables in the args
+processed_args = []
+for arg in task_args:
+    arg = arg.replace("${input:cpuTestNameSelect}", test_name)
+    arg = arg.replace("${input:elementNameSelect}", test_name)
+    processed_args.append(arg)
 
 # Run the sequence of commands with the selected test name
 commands = [
@@ -34,17 +61,12 @@ for cmd in commands:
         print(f"Error running: {' '.join(cmd)}")
         sys.exit(1)
 
-# Format the hex file for Verilosg (convert bytes to 32-bit words)
+# Format the hex file for Verilog (convert bytes to 32-bit words)
 print(f"Formatting hex file...")
 subprocess.run(["python", "scripts/format_hex.py", f"build/hex/cpu_{test_name}_program.hex", f"build/hex/cpu_{test_name}_program.hex"], cwd=".")
 
-# Compile and run the simulation
-if cpu_type == "--pipelined":
-    # Build with pipelined CPU and all pipelined components
-    sim_cmd = ["iverilog", "-g2012", cpu_define, "-I", "elements/inc", "-I", "libraries", "-I", "projects/inc", "-o", f"build/sim/projects/cpu_{test_name}_sim", "projects/src/cpu_pipelined.v", "elements/src/adder.v", "elements/src/alu.v", "elements/src/bcomp.v", "elements/src/control.v", "elements/src/dmem.v", "elements/src/ex_reg.v", "elements/src/flush.v", "elements/src/forwarding.v", "elements/src/id_reg.v", "elements/src/if_reg.v", "elements/src/imem.v", "elements/src/imm_gen.v", "elements/src/m_reg.v", "elements/src/muxes.v", "elements/src/pc.v", "elements/src/pipeline_psd_control.v", "elements/src/regfile.v", "elements/src/stalling.v", f"projects/tests/tb_cpu_{test_name}.v"]
-else:
-    # Build with single-cycle CPU
-    sim_cmd = ["iverilog", "-g2012", cpu_define, "-I", "elements/inc", "-I", "libraries", "-I", "projects/inc", "-o", f"build/sim/projects/cpu_{test_name}_sim", "projects/src/cpu_single_cycle.v", "elements/src/adder.v", "elements/src/alu.v", "elements/src/bcomp.v", "elements/src/control.v", "elements/src/dmem.v", "elements/src/imem.v", "elements/src/imm_gen.v", "elements/src/muxes.v", "elements/src/pc.v", "elements/src/regfile.v", f"projects/tests/tb_cpu_{test_name}.v"]
+# Compile and run the simulation with arguments from tasks.json
+sim_cmd = ["iverilog"] + processed_args
 
 commands = [
     sim_cmd,

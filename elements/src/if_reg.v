@@ -1,6 +1,7 @@
 module if_reg (
     input wire clk,
     input wire rst,
+    input wire en,
     input wire [31:0] pc_plus4_in,
     input wire [31:0] pc_in,
     input wire [31:0] inst_in,
@@ -14,7 +15,7 @@ module if_reg (
       pc_plus4_out <= 32'b0;
       pc_out <= 32'b0;
       inst_out <= 32'b0;
-    end else begin
+    end else if (en) begin
       pc_plus4_out <= pc_plus4_in;
       pc_out <= pc_in;
       inst_out <= inst_in;

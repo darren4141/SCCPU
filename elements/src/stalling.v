@@ -3,7 +3,7 @@
 module stalling (
     input wire [31:0] inst_ex,
     input wire [31:0] inst_m,
-    input wire RegWen_m,
+    input wire RegWen,
     output reg stall
 );
 
@@ -23,7 +23,7 @@ module stalling (
 
   always @(*) begin
     stall = 1'b0;
-    if (RegWen_m && (rd_m == rs1_ex) && (opcode_m == `OPCODE_LOAD) &&
+    if (RegWen && (rd_m == rs1_ex) && (opcode_m == `OPCODE_LOAD) &&
       (opcode_ex == `OPCODE_ARITH_OP ||
       opcode_ex == `OPCODE_ARITH_OP_IMM ||
       opcode_ex == `OPCODE_LOAD ||
@@ -33,7 +33,7 @@ module stalling (
       stall = 1'b1;
     end
 
-    if (RegWen_m && (rd_m == rs2_ex) && (opcode_m == `OPCODE_LOAD) &&
+    if (RegWen && (rd_m == rs2_ex) && (opcode_m == `OPCODE_LOAD) &&
       (opcode_ex == `OPCODE_ARITH_OP ||
       opcode_ex == `OPCODE_STORE ||
       opcode_ex == `OPCODE_BRANCH)) begin

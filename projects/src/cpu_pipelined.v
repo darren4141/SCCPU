@@ -37,6 +37,15 @@ module cpu_pipelined (
       .fwdM(fwdM)
   );
 
+  wire stall;
+
+  stalling u_stalling (
+      .inst_ex(inst_ex_reg),
+      .inst_m (inst_m_reg),
+      .RegWen (`CTRL_REGWEN(control)),
+      .stall  (stall)
+  );
+
   wire [31:0] pc_next;
   wire [31:0] pc_if_reg;
   wire [31:0] pc_id_reg;
@@ -45,6 +54,7 @@ module cpu_pipelined (
   pc u_pc (
       .clk(clk),
       .rst(rst),
+      .en (~stall),
       .in (pc_next),
       .out(pc_if_reg)
   );
@@ -70,6 +80,7 @@ module cpu_pipelined (
   if_reg u_if_reg (
       .clk(clk),
       .rst(rst),
+      .en(~stall),
       .pc_plus4_in(pc_plus4_if_reg),
       .pc_in(pc_if_reg),
       .inst_in(inst_if_reg),
@@ -86,7 +97,7 @@ module cpu_pipelined (
   wire [31:0] dataB_ex_reg;
   wire [31:0] dataB_m_reg;
 
-  regfile u_regfile (
+  regfile_pipelined u_regfile (
       .clk(clk),
       .we(`CTRL_REGWEN(control)),
       .addrA(inst_id_reg[19:15]),
@@ -97,6 +108,8 @@ module cpu_pipelined (
       .dataB(dataB_id_reg)
   );
 
+  wire [31:0] id_reg_inst_out = stall ? 32'b0 : inst_id_reg;
+
   id_reg u_id_reg (
       .clk(clk),
       .rst(rst),
@@ -104,7 +117,7 @@ module cpu_pipelined (
       .pc_in(pc_id_reg),
       .dataA_in(dataA_id_reg),
       .dataB_in(dataB_id_reg),
-      .inst_in(inst_id_reg),
+      .inst_in(id_reg_inst_out),
       .pc_plus4_out(pc_plus4_ex_reg),
       .pc_out(pc_ex_reg),
       .dataA_out(dataA_ex_reg),

@@ -10,6 +10,7 @@ module cpu_single_cycle (
   pc u_pc (
       .clk(clk),
       .rst(rst),
+      .en (1'b1),
       .in (pc_next),
       .out(pc_cur)
   );

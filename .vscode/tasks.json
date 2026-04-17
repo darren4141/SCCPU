@@ -212,7 +212,7 @@
         "elements/src/muxes.v",
         "elements/src/pc.v",
         "elements/src/pipeline_psd_control.v",
-        "elements/src/regfile.v",
+        "elements/src/regfile_pipelined.v",
         "elements/src/stalling.v",
         "projects/tests/tb_cpu_${input:cpuTestNameSelect}.v"
       ],
