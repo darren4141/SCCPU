@@ -107,6 +107,7 @@ program_dir = Path(__file__).parent.parent / "projects" / "programs"
 test_results = {}
 total_passed = 0
 total_failed = 0
+build_failures = []
 
 for test in cpu_tests:
     print(f"\n{'='*50}")
@@ -129,34 +130,45 @@ for test in cpu_tests:
     if result.stderr:
         print(result.stderr)
     
-    # Parse test results
-    passed = result.stdout.count("PASS:")
-    failed = result.stdout.count("FAIL:")
-    
-    test_results[test] = {"passed": passed, "failed": failed}
-    total_passed += passed
-    total_failed += failed
-    
+    # Check for build failure
     if result.returncode != 0:
-        print(f"Warning: Test failed for {test}")
+        build_failures.append({
+            "test": test,
+            "error": result.stderr or result.stdout
+        })
+        test_results[test] = {"passed": 0, "failed": 0, "status": "BUILD_FAILED"}
+        print(f"Warning: Build failed for {test}")
+    else:
+        # Parse test results
+        passed = result.stdout.count("PASS:")
+        failed = result.stdout.count("FAIL:")
+        
+        test_results[test] = {"passed": passed, "failed": failed, "status": "RUN_COMPLETE"}
+        total_passed += passed
+        total_failed += failed
 
 print(f"\n{'='*50}")
 print("TEST RECAP")
 print(f"{'='*50}")
 for test, results in test_results.items():
-    passed = results["passed"]
-    failed = results["failed"]
+    status = results.get("status", "RUN_COMPLETE")
     
-    if failed == 0:
-        color = "\033[92m" # GREEN
+    if status == "BUILD_FAILED":
+        print(f"\033[91m{test:20}\033[0m \033[91mBUILD FAILED\033[0m")
     else:
-        color = "\033[91m" # RED
-    reset = "\033[0m"
-    
-    print(f"{color}{test:20}{reset} PASS: {passed:3}  FAIL: {failed:3}")
+        passed = results["passed"]
+        failed = results["failed"]
+        
+        if failed == 0:
+            color = "\033[92m" # GREEN
+        else:
+            color = "\033[91m" # RED
+        reset = "\033[0m"
+        
+        print(f"{color}{test:20}{reset} PASS: {passed:3}  FAIL: {failed:3}")
 
 print(f"{'-'*50}")
-print(f"{'TOTAL':20} PASS: {total_passed:3}  FAIL: {total_failed:3}")
+print(f"{'TOTAL':20} PASS: {total_passed:3}  FAIL: {total_failed:3}  BUILD FAILURES: {len(build_failures):3}")
 print(f"{'='*50}")
 
 # Instruction coverage diagnostics
@@ -240,8 +252,28 @@ if non_standard:
 
 print(f"{'='*50}\n")
 
-if total_failed == 0:
+# Display build failures if any
+if build_failures:
+    print(f"{'='*50}")
+    print("BUILD FAILURES")
+    print(f"{'='*50}")
+    for failure in build_failures:
+        print(f"\n{failure['test']}:")
+        print(f"  Error output:")
+        # Print first few lines of error
+        error_lines = failure['error'].split('\n')[:5]
+        for line in error_lines:
+            if line.strip():
+                print(f"    {line}")
+        if len(failure['error'].split('\n')) > 5:
+            print(f"    ... (see full output above)")
+    print(f"{'='*50}\n")
+
+if total_failed == 0 and len(build_failures) == 0:
     print("\033[92mAll tests passed!\033[0m")
+elif len(build_failures) > 0:
+    print(f"\033[91m{len(build_failures)} build failure(s) and {total_failed} test(s) failed!\033[0m")
+    sys.exit(1)
 else:
     print(f"\033[91m{total_failed} test(s) failed!\033[0m")
     sys.exit(1)

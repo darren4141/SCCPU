@@ -1,4 +1,4 @@
-`include "control_defs.vh"
+`include "pipeline_psd_control_defs.vh"
 
 module cpu_pipelined (
     input wire clk,

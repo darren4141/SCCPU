@@ -52,9 +52,7 @@ module tb_cpu_add;
 
     for (i = 1; i < 50; i = i + 1) begin
       repeat (1) @(posedge clk);
-      $display(
-          "inst_if_reg: %d\ninst_id_reg: %d\ninst_ex_reg: %d\ninst_m_reg: %d\ninst_wb_reg: %d\n",
-          dut.inst_if_reg, dut.inst_id_reg, dut.inst_ex_reg, dut.inst_m_reg, dut.inst_wb_reg);
+      // Add debugging messages here...
     end
 
     // TEST CODE

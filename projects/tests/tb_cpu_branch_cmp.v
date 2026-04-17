@@ -7,6 +7,7 @@ module tb_cpu_branch_cmp;
 
   reg clk;
   reg rst;
+  integer i;
 
 `ifdef CPU_PIPELINED
   cpu_pipelined dut (
@@ -49,7 +50,10 @@ module tb_cpu_branch_cmp;
     #10;
     rst = 0;
 
-    repeat (20) @(posedge clk);
+    for (i = 1; i < 50; i = i + 1) begin
+      repeat (1) @(posedge clk);
+      // Add debugging messages here...
+    end
 
     // TEST CODE
     expect_32(32'd10, `REG_X1);  // x1 unchanged (branch taken)

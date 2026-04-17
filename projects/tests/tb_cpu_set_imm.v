@@ -7,6 +7,7 @@ module tb_cpu_set_imm;
 
   reg clk;
   reg rst;
+  integer i;
 
 `ifdef CPU_PIPELINED
   cpu_pipelined dut (
@@ -49,7 +50,10 @@ module tb_cpu_set_imm;
     #10;
     rst = 0;
 
-    repeat (20) @(posedge clk);
+    for (i = 1; i < 50; i = i + 1) begin
+      repeat (1) @(posedge clk);
+      // Add debugging messages here...
+    end
 
     // TEST CODE
     // x2 = slti: 5 < 10 = true = 1
