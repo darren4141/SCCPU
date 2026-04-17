@@ -31,8 +31,18 @@ module regfile (
 
   // Update dataA and dataB outputs
   always @(*) begin
-    dataA = (addrA != 0) ? regfile[addrA] : 32'b0;
-    dataB = (addrB != 0) ? regfile[addrB] : 32'b0;
+
+    if (we && addrD != 0 && addrA == addrD) begin
+      dataA = dataD;
+    end else begin
+      dataA = (addrA != 0) ? regfile[addrA] : 32'b0;
+    end
+
+    if (we && addrD != 0 && addrB == addrD) begin
+      dataB = dataD;
+    end else begin
+      dataB = (addrB != 0) ? regfile[addrB] : 32'b0;
+    end
   end
 
 endmodule

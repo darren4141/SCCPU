@@ -23,6 +23,20 @@ module cpu_pipelined (
       .control(control)
   );
 
+  wire [1:0] fwdA;
+  wire [1:0] fwdB;
+  wire fwdM;
+
+  forwarding u_forwarding (
+      .inst_ex(inst_ex_reg),
+      .inst_m(inst_m_reg),
+      .inst_wb(inst_wb_reg),
+      .RegWen(`CTRL_REGWEN(control)),
+      .fwdA(fwdA),
+      .fwdB(fwdB),
+      .fwdM(fwdM)
+  );
+
   wire [31:0] pc_next;
   wire [31:0] pc_if_reg;
   wire [31:0] pc_id_reg;
@@ -117,18 +131,22 @@ module cpu_pipelined (
   wire [31:0] muxa_out;
   wire [31:0] muxb_out;
 
-  mux_221 u_muxa (
-      .in0(dataA_ex_reg),
-      .in1(pc_ex_reg),
-      .sel(`CTRL_ASEL(control)),
-      .out(muxa_out)
+  mux_421 u_muxa (
+      .in00(dataA_ex_reg),
+      .in01(pc_ex_reg),
+      .in10(aluRes_m),
+      .in11(dataD),
+      .sel (fwdA[1] == 1 ? fwdA : {1'b0, `CTRL_ASEL(control)}),
+      .out (muxa_out)
   );
 
-  mux_221 u_muxb (
-      .in0(dataB_ex_reg),
-      .in1(imm),
-      .sel(`CTRL_BSEL(control)),
-      .out(muxb_out)
+  mux_421 u_muxb (
+      .in00(dataB_ex_reg),
+      .in01(imm),
+      .in10(aluRes_m),
+      .in11(dataD),
+      .sel (fwdB[1] == 1 ? fwdB : {1'b0, `CTRL_BSEL(control)}),
+      .out (muxb_out)
   );
 
   wire [31:0] aluRes_ex;

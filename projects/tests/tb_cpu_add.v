@@ -52,7 +52,21 @@ module tb_cpu_add;
 
     for (i = 1; i < 50; i = i + 1) begin
       repeat (1) @(posedge clk);
-      // Add debugging messages here...
+      // $display(
+      //     "inst_if_reg: %d\ninst_id_reg: %d\ninst_ex_reg: %d\ninst_m_reg: %d\ninst_wb_reg: %d\n",
+      //     dut.inst_if_reg, dut.inst_id_reg, dut.inst_ex_reg, dut.inst_m_reg, dut.inst_wb_reg);
+      // $display("rd: %d rs1: %d rs2: %d\n dataD: %d reg[rs1]: $d reg[rs2]: %d\n",
+      //          dut.u_regfile.addrD, dut.u_regfile.addrA, dut.u_regfile.addrB, dut.u_regfile.dataD,
+      //          dut.u_regfile.dataA, dut.u_regfile.dataB);
+      // $display("immGen: %d aluin1: %d aluin2: %d aluOp: %d aluRes: %d\n", dut.u_imm_gen.imm,
+      //          dut.u_alu.a, dut.u_alu.b, dut.u_alu.op, dut.u_alu.res);
+
+      // $display(
+      //     "CONTROL: PCSEL=%b IMMSEL=%b REGWEN=%b BRUN=%b BSEL=%b ASEL=%b ALUSEL=%b MEMRW=%b MEMSIZE=%b WBSEL=%b\n",
+      //     `CTRL_PCSEL(dut.control), `CTRL_IMMSEL(dut.control), `CTRL_REGWEN(dut.control),
+      //     `CTRL_BRUN(dut.control), `CTRL_BSEL(dut.control), `CTRL_ASEL(dut.control),
+      //     `CTRL_ALUSEL(dut.control), `CTRL_MEMRW(dut.control), `CTRL_MEMSIZE(dut.control),
+      //     `CTRL_WBSEL(dut.control));
     end
 
     // TEST CODE

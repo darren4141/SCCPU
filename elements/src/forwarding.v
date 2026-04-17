@@ -4,8 +4,7 @@ module forwarding (
     input wire [31:0] inst_ex,
     input wire [31:0] inst_m,
     input wire [31:0] inst_wb,
-    input wire RegWen_m,
-    input wire RegWen_wb,
+    input wire RegWen,
     output reg [1:0] fwdA,
     output reg [1:0] fwdB,
     output reg fwdM
@@ -39,7 +38,7 @@ module forwarding (
     fwdM = 1'b0;
 
     // Condition to check if wb instruction is writing a valid rd
-    if (RegWen_wb &&
+    if (RegWen &&
     (opcode_wb == `OPCODE_ARITH_OP ||
     opcode_wb == `OPCODE_ARITH_OP_IMM ||
     opcode_wb == `OPCODE_LOAD ||
@@ -53,13 +52,13 @@ module forwarding (
       opcode_ex == `OPCODE_STORE ||
       opcode_ex == `OPCODE_BRANCH ||
       opcode_ex == `OPCODE_JALR))
-        fwdA = 2'b10;
+        fwdA = 2'b11;
 
       if ((rd_wb == rs2_ex) &&
       (opcode_ex == `OPCODE_ARITH_OP ||
       opcode_ex == `OPCODE_STORE ||
       opcode_ex == `OPCODE_BRANCH))
-        fwdB = 2'b10;
+        fwdB = 2'b11;
 
       if ((rd_wb == rs2_m) &&
       (opcode_m == `OPCODE_ARITH_OP ||
@@ -70,7 +69,7 @@ module forwarding (
     end
 
     // Condition to check if m instruction is writing a valid rd (m instruction cannot be load)
-    if (RegWen_m &&
+    if (RegWen &&
     (opcode_m == `OPCODE_ARITH_OP ||
     opcode_m == `OPCODE_ARITH_OP_IMM ||
     opcode_m == `OPCODE_LUI ||
@@ -83,13 +82,13 @@ module forwarding (
       opcode_ex == `OPCODE_STORE ||
       opcode_ex == `OPCODE_BRANCH ||
       opcode_ex == `OPCODE_JALR))
-        fwdA = 2'b01;
+        fwdA = 2'b10;
 
       if ((rd_m == rs2_ex) &&
       (opcode_ex == `OPCODE_ARITH_OP ||
       opcode_ex == `OPCODE_STORE ||
       opcode_ex == `OPCODE_BRANCH))
-        fwdB = 2'b01;
+        fwdB = 2'b10;
 
     end
   end
