@@ -227,7 +227,7 @@
       "type": "shell",
       "command": "vvp",
       "args": [
-        "build/sim/projects/$cpu_{input:cpuTestNameSelect}_sim"
+        "build/sim/projects/cpu_${input:cpuTestNameSelect}_sim"
       ],
       "dependsOn": "Build Verilog Pipelined CPU Test",
       "problemMatcher": "$gcc"

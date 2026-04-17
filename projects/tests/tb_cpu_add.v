@@ -7,6 +7,7 @@ module tb_cpu_add;
 
   reg clk;
   reg rst;
+  integer i;
 
 `ifdef CPU_PIPELINED
   cpu_pipelined dut (
@@ -49,7 +50,12 @@ module tb_cpu_add;
     #10;
     rst = 0;
 
-    repeat (50) @(posedge clk);
+    for (i = 1; i < 50; i = i + 1) begin
+      repeat (1) @(posedge clk);
+      $display(
+          "inst_if_reg: %d\ninst_id_reg: %d\ninst_ex_reg: %d\ninst_m_reg: %d\ninst_wb_reg: %d\n",
+          dut.inst_if_reg, dut.inst_id_reg, dut.inst_ex_reg, dut.inst_m_reg, dut.inst_wb_reg);
+    end
 
     // TEST CODE
 

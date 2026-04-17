@@ -32,7 +32,7 @@ module cpu_pipelined (
       .clk(clk),
       .rst(rst),
       .in (pc_next),
-      .out(pc_cur)
+      .out(pc_if_reg)
   );
 
   wire [31:0] pc_plus4_if_reg;
@@ -42,13 +42,13 @@ module cpu_pipelined (
   wire [31:0] pc_plus4_wb_reg;
 
   adder u_pc_adder (
-      .a  (pc_cur),
+      .a  (pc_if_reg),
       .b  (32'd4),
       .sum(pc_plus4_if_reg)
   );
 
   imem u_imem (
-      .addr(pc_cur),
+      .addr(pc_if_reg),
       .inst(inst_if_reg)
   );
 
@@ -57,7 +57,7 @@ module cpu_pipelined (
       .clk(clk),
       .rst(rst),
       .pc_plus4_in(pc_plus4_if_reg),
-      .pc_in(pc_cur),
+      .pc_in(pc_if_reg),
       .inst_in(inst_if_reg),
       .pc_plus4_out(pc_plus4_id_reg),
       .pc_out(pc_id_reg),
@@ -149,7 +149,7 @@ module cpu_pipelined (
       .alu_in(aluRes_ex),
       .dataB_in(dataB_ex_reg),
       .inst_in(inst_ex_reg),
-      .pc_plus4_out(pc_plus4_ex_reg),
+      .pc_plus4_out(pc_plus4_m_reg),
       .alu_out(aluRes_m),
       .dataB_out(dataB_m_reg),
       .inst_out(inst_m_reg)
@@ -190,7 +190,7 @@ module cpu_pipelined (
   );
 
   mux_221 u_muxpc (
-      .in0(pc_plus4_wb_reg),
+      .in0(pc_plus4_if_reg),
       .in1(aluRes_wb),
       .sel(`CTRL_PCSEL(control)),
       .out(pc_next)
